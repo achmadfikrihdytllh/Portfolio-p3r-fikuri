@@ -1,0 +1,122 @@
+<div id="music-player-container" class="fixed bottom-8 right-8 z-[90] translate-y-32 opacity-0 transition-all duration-1000 ease-out">
+    
+    <div class="relative group">
+        
+        <div class="absolute inset-0 bg-[#00f0ff] transform translate-x-1 translate-y-1 -skew-x-12 opacity-50 blur-sm transition-all group-hover:opacity-80"></div>
+        
+        <div class="relative flex items-center gap-4 bg-gradient-to-r from-[#000a12] to-[#001e3c] border-2 border-[#2DE2E6] px-6 py-3 -skew-x-12 shadow-[0_0_15px_rgba(0,240,255,0.2)] overflow-hidden">
+            
+            <div class="absolute inset-0 opacity-20 pointer-events-none bg-[linear-gradient(45deg,transparent_25%,rgba(45,226,230,0.1)_50%,transparent_75%,transparent_100%)] bg-[length:10px_10px]"></div>
+
+            <button id="toggle-bgm" class="skew-x-12 flex items-center justify-center w-10 h-10 rounded-full bg-[#2DE2E6] text-[#000a12] hover:bg-white hover:scale-110 transition-all duration-300 shadow-lg cursor-pointer z-10">
+                <svg id="icon-play" class="w-4 h-4 hidden" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                <svg id="icon-pause" class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+            </button>
+
+            <div class="flex flex-col skew-x-12 min-w-[120px]">
+                
+                <div class="flex items-center justify-between mb-1">
+                    <span class="text-[10px] font-bold text-[#2DE2E6] tracking-widest font-mono">BGM // ACTIVE</span>
+                    <div id="visualizer" class="flex items-end gap-[2px] h-3">
+                        <div class="bar w-1 bg-white animate-bounce-custom" style="--delay: 0s"></div>
+                        <div class="bar w-1 bg-[#2DE2E6] animate-bounce-custom" style="--delay: 0.1s"></div>
+                        <div class="bar w-1 bg-white animate-bounce-custom" style="--delay: 0.2s"></div>
+                        <div class="bar w-1 bg-[#2DE2E6] animate-bounce-custom" style="--delay: 0.3s"></div>
+                    </div>
+                </div>
+
+                <h3 class="text-white font-bold text-sm tracking-wide leading-none uppercase truncate max-w-[150px]">
+                    Color Your Night
+                </h3>
+            </div>
+
+        </div>
+    </div>
+
+    <audio id="bgm-audio" src="/Color Your Night.mp3" loop preload="auto"></audio>
+
+</div>
+
+<style>
+    /* Custom Keyframes for Visualizer */
+    @keyframes sound-bars {
+        0%, 100% { height: 20%; opacity: 0.5; }
+        50% { height: 100%; opacity: 1; }
+    }
+    
+    .bar {
+        height: 100%;
+        animation: sound-bars 0.8s infinite ease-in-out;
+        animation-delay: var(--delay);
+    }
+
+    /* Pause animation when music is paused */
+    .paused .bar {
+        animation-play-state: paused;
+        height: 20%;
+        opacity: 0.3;
+    }
+</style>
+
+<script>
+    const playerContainer = document.getElementById('music-player-container');
+    const btn = document.getElementById('toggle-bgm');
+    const audio = document.getElementById('bgm-audio') as HTMLAudioElement;
+    const iconPlay = document.getElementById('icon-play');
+    const iconPause = document.getElementById('icon-pause');
+    const visualizer = document.getElementById('visualizer');
+
+    let isPlaying = false;
+
+
+    function toggleAudio() {
+        if (!audio) return;
+        
+        if (isPlaying) {
+            audio.pause();
+            isPlaying = false;
+            updateUI(false);
+        } else {
+            audio.play().catch(e => console.log("Audio prevent:", e));
+            isPlaying = true;
+            updateUI(true);
+        }
+    }
+
+    function updateUI(playing: boolean) {
+        if (playing) {
+            iconPlay?.classList.add('hidden');
+            iconPause?.classList.remove('hidden');
+            visualizer?.classList.remove('paused');
+        } else {
+            iconPlay?.classList.remove('hidden');
+            iconPause?.classList.add('hidden');
+            visualizer?.classList.add('paused');
+        }
+    }
+
+    btn?.addEventListener('click', toggleAudio);
+    document.addEventListener('personaSummoned', () => {
+        if (audio) {
+            audio.volume = 0.3; 
+            const playPromise = audio.play();
+            
+            if (playPromise !== undefined) {
+                playPromise.then(() => {
+                    isPlaying = true;
+                    updateUI(true);
+                }).catch(error => {
+                    console.log("Autoplay prevented, waiting for manual click.");
+                    isPlaying = false;
+                    updateUI(false);
+                });
+            }
+        }
+
+        if (playerContainer) {
+            setTimeout(() => {
+                playerContainer.classList.remove('translate-y-32', 'opacity-0');
+            }, 1000); 
+        }
+    });
+</script>

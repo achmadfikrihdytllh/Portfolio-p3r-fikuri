@@ -1,0 +1,129 @@
+---
+// SummonIntro.astro - Handles Intro Overlay, Sound, Flash, and Splash Visuals
+---
+
+<div id="summon-overlay" class="fixed inset-0 z-[9998] bg-[#000F24] cursor-crosshair transition-opacity duration-1000 flex items-start justify-center pt-20">
+    
+    <div id="hint-text" class="text-cyan-400 font-mono tracking-[0.3em] text-sm animate-pulse mt-20 text-center">
+        Inspired by Persona 3 Reload <br> <span class="font-bold text-white">CLICK TO DIVE</span>
+    </div>
+
+    <audio id="sfx-summon" src="/summon.mp3" preload="auto"></audio>
+    <audio id="sfx-splash" src="/splash.mp3" preload="auto"></audio>
+</div>
+
+
+<div id="splash-container" class="fixed inset-0 z-[9999] pointer-events-none opacity-0 transition-opacity duration-300 overflow-hidden">
+    
+    <div class="shockwave absolute top-[-50%] left-[-50%] w-[200%] h-[200%] bg-[radial-gradient(circle,rgba(45,226,230,0.8)_0%,rgba(3,90,166,0.4)_40%,transparent_70%)] scale-0 opacity-0"></div>
+
+    <div id="fast-bubbles-container" class="absolute inset-0"></div>
+</div>
+
+
+<div id="flash-bang" class="fixed inset-0 bg-[#e0fbff] opacity-0 pointer-events-none z-[10000] transition-opacity duration-[2000ms] ease-out"></div>
+
+
+<style>
+    /* Kunci scroll saat intro */
+    :global(body) { overflow: hidden; }
+
+    /* Animasi Shockwave saat class .active ditambahkan */
+    #splash-container.active .shockwave {
+        animation: shockwave-burst 1.5s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+    }
+
+    @keyframes shockwave-burst {
+        0% { transform: scale(0); opacity: 1; }
+        50% { opacity: 0.8; }
+        100% { transform: scale(1.5); opacity: 0; }
+    }
+
+    :global(.fast-bubble) {
+        position: absolute;
+        top: -50px;
+        background: radial-gradient(circle at 30% 30%, white, #2DE2E6);
+        border-radius: 50%;
+        box-shadow: 0 0 8px rgba(45, 226, 230, 0.8);
+        opacity: 0.8;
+        width: var(--f-size);
+        height: var(--f-size);
+        left: var(--f-left);
+        animation: plunge-down var(--f-duration) cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+    }
+
+    @keyframes plunge-down {
+        0% { transform: translateY(0) scale(1); opacity: 1; }
+        100% { transform: translateY(120vh) scale(0.5); opacity: 0; }
+    }
+</style>
+
+
+<script>
+    const overlay = document.getElementById('summon-overlay');
+    const hint = document.getElementById('hint-text');
+    const flash = document.getElementById('flash-bang');
+    const splashContainer = document.getElementById('splash-container');
+    const fastBubblesContainer = document.getElementById('fast-bubbles-container');
+    
+    const audioSummon = document.getElementById('sfx-summon') as HTMLAudioElement;
+    const audioSplash = document.getElementById('sfx-splash') as HTMLAudioElement;
+
+    let hasTriggered = false;
+
+    function triggerDive() {
+        if (hasTriggered) return;
+        hasTriggered = true;
+        if (audioSummon) { audioSummon.volume = 0.6; audioSummon.play().catch(()=>{}); }
+        setTimeout(() => {
+             if (audioSplash) { audioSplash.volume = 0.8; audioSplash.play().catch(()=>{}); }
+        }, 100);
+
+        if (flash) {
+            flash.style.opacity = '1';
+            flash.style.transition = 'none';
+            setTimeout(() => {
+                 flash.style.transition = 'opacity 2s ease-out';
+                 flash.style.opacity = '0';
+            }, 50);
+        }
+
+        if (splashContainer) {
+            splashContainer.style.opacity = '1';
+            splashContainer.classList.add('active'); 
+
+            if (fastBubblesContainer) {
+                for (let i = 0; i < 50; i++) { 
+                    const b = document.createElement('div');
+                    b.classList.add('fast-bubble');
+                    b.style.setProperty('--f-size', (Math.random() * 20 + 5) + 'px');
+                    b.style.setProperty('--f-left', Math.random() * 100 + '%');
+                    b.style.setProperty('--f-duration', (Math.random() * 1 + 0.8) + 's'); // Durasi cepat 0.8s - 1.8s
+                    fastBubblesContainer.appendChild(b);
+                }
+            }
+        }
+
+        if (overlay) overlay.style.opacity = '0';
+        if (hint) hint.style.opacity = '0';
+
+
+        setTimeout(() => {
+             document.dispatchEvent(new CustomEvent('personaSummoned'));
+        }, 200);
+
+        
+        setTimeout(() => {
+            if (overlay) overlay.remove();
+            if (splashContainer) splashContainer.remove();
+            if (flash) flash.remove();
+            document.body.style.overflow = 'auto';
+        }, 3000); 
+    }
+
+
+    overlay?.addEventListener('click', triggerDive);
+    document.addEventListener('click', (e) => {
+        if (!hasTriggered) triggerDive();
+    }, { once: true, capture: true });
+</script>

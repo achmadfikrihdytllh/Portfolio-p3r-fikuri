@@ -1,0 +1,94 @@
+<div id="splash-container" class="fixed top-0 left-0 w-full h-[60vh] pointer-events-none z-[100] overflow-hidden">
+    
+    <div class="impact-flash absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-white via-cyan-300 to-transparent opacity-0"></div>
+
+    <div class="ripple r1"></div>
+    <div class="ripple r2"></div>
+
+    <div id="splash-bubbles" class="absolute inset-0"></div>
+
+</div>
+
+<style>
+
+    .impact-flash {
+        animation: flash-impact 1.5s ease-out forwards;
+    }
+    @keyframes flash-impact {
+        0% { opacity: 0; transform: translateY(-100%); }
+        10% { opacity: 0.8; transform: translateY(0); }
+        100% { opacity: 0; transform: translateY(20px); }
+    }
+
+    /* 2. Ripples (Gelombang) */
+    .ripple {
+        position: absolute;
+        top: -100px;
+        left: 50%;
+        width: 150%;
+        height: 200px;
+        transform: translateX(-50%);
+        background: radial-gradient(ellipse at top, rgba(255, 255, 255, 0.4), transparent 70%);
+        opacity: 0;
+        border-radius: 50%;
+    }
+    .r1 { animation: ripple-down 2.5s ease-out forwards 0.1s; }
+    .r2 { animation: ripple-down 3s ease-out forwards 0.3s; }
+
+    @keyframes ripple-down {
+        0% { opacity: 0; transform: translateX(-50%) translateY(0) scaleY(0.5); }
+        20% { opacity: 0.6; }
+        100% { opacity: 0; transform: translateX(-50%) translateY(80vh) scaleY(2); }
+    }
+
+    /* 3. Bubbles (Partikel) */
+    /* Class ini akan dipasang via JS */
+    :global(.splash-bubble) {
+        position: absolute;
+        top: 0;
+        background: radial-gradient(circle at 30% 30%, white, rgba(137, 243, 255, 0.5));
+        border-radius: 50%;
+        box-shadow: 0 0 5px rgba(255, 255, 255, 0.8);
+        opacity: 0;
+        /* Menggunakan CSS Variables untuk randomisasi */
+        left: var(--start-x);
+        width: var(--size);
+        height: var(--size);
+        animation: plunge-down var(--duration) cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards var(--delay);
+    }
+
+    @keyframes plunge-down {
+        0% { opacity: 1; transform: translateY(-20px) scale(1); }
+        100% { opacity: 0; transform: translateY(var(--end-y)) scale(0.5); }
+    }
+</style>
+
+<script>
+
+    const container = document.getElementById('splash-container');
+    const bubblesContainer = document.getElementById('splash-bubbles');
+    const BUBBLE_COUNT = 40; 
+
+    if (bubblesContainer && container) {
+        for (let i = 0; i < BUBBLE_COUNT; i++) {
+            const bubble = document.createElement('div');
+            bubble.classList.add('splash-bubble');
+            const startX = Math.random() * 100 + '%';
+            const size = (Math.random() * 15 + 5) + 'px'; 
+            const duration = (Math.random() * 1 + 1.5) + 's'; 
+            const delay = Math.random() * 0.5 + 's';
+            const endY = (Math.random() * 40 + 40) + 'vh'; 
+            bubble.style.setProperty('--start-x', startX);
+            bubble.style.setProperty('--size', size);
+            bubble.style.setProperty('--duration', duration);
+            bubble.style.setProperty('--delay', delay);
+            bubble.style.setProperty('--end-y', endY);
+
+            bubblesContainer.appendChild(bubble);
+        }
+
+        setTimeout(() => {
+            container.remove();
+        }, 3500);
+    }
+</script>

@@ -1,0 +1,10 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Default Background Dark Blue Persona */
+body {
+  background-color: #0e1623; 
+  color: white;
+  margin: 0;
+}

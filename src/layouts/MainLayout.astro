@@ -1,0 +1,61 @@
+---
+import "../styles/global.css";
+import Bubbles from '../components/Bubbles.astro'; 
+import MusicPlayer from '../components/MusicPlayer.astro';
+import { ViewTransitions } from 'astro:transitions';
+
+const { title } = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+    <head>
+        <meta charset="utf-8" />
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        <meta name="viewport" content="width=device-width" />
+        <meta name="generator" content={Astro.generator} />
+        <title>{title}</title>
+        
+        <ViewTransitions />
+        
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Exo+2:ital,wght@0,400;0,600;0,700;0,900;1,700&display=swap" rel="stylesheet">
+    </head>
+    
+    <body class="bg-[#002060] text-white font-['Exo_2'] overflow-x-hidden relative min-h-screen">
+        
+        <div class="fixed inset-0 z-[-3] bg-[radial-gradient(circle_at_80%_0%,_var(--tw-gradient-stops))] from-[#85F2FF] via-[#0090F0] to-[#001540]"></div>
+
+        <div class="fixed inset-0 z-[-2] bg-[linear-gradient(135deg,transparent_0%,rgba(255,255,255,0.1)_30%,transparent_60%)] pointer-events-none"></div>
+
+        <MusicPlayer />
+
+        <Bubbles />
+
+        <div class="fixed inset-0 pointer-events-none z-[-1] bg-[radial-gradient(circle_at_center,transparent_20%,#000515_120%)] opacity-20"></div>
+
+        <div class="relative z-10">
+            <slot />
+        </div>
+
+    </body>
+</html>
+
+<style is:global>
+    /* Scrollbar */
+    ::-webkit-scrollbar {
+        width: 10px;
+    }
+    ::-webkit-scrollbar-track {
+        background: #001540; 
+    }
+    ::-webkit-scrollbar-thumb {
+        background: linear-gradient(to bottom, #85F2FF, #0090F0);
+        border-radius: 5px;
+        border: 2px solid #001540;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+        background: #85F2FF; 
+    }
+</style>

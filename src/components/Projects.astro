@@ -1,0 +1,158 @@
+---
+// src/components/Projects.astro
+
+const projects = [
+  { 
+    title: "ATTENDANCE SYSTEM", 
+    category: "Internal System",
+    status: "COMPLETE",
+    type: "INTERNAL", 
+    description: "Pengembangan sistem Backend presensi karyawan berbasis REST API menggunakan AdonisJS (TypeScript) dan PostgreSQL. Sistem ini menangani pencatatan kehadiran real-time dengan dukungan Multi-Timezone, integrasi penyimpanan bukti foto (Signed URLs), serta fitur manajemen koreksi data oleh Admin yang menggunakan Database Transactions untuk menjamin integritas data. Sistem ini dirancang untuk skalabilitas tinggi dan kemudahan integrasi dengan layanan internal lainnya.",
+    tech: ["AdonisJS", "PostgreSQL", "REST API", "TypeScript"],
+    link: null, 
+    image: "/project1.jpg" 
+  },
+  
+  { 
+    title: "DENTAL CLINIC SYSTEM", 
+    category: "Legacy Monolith", 
+    status: "OPEN SOURCE",
+    type: "PUBLIC", // Bisa diklik ke GitHub
+    description: "Sistem reservasi pasien dan rekam medis klinik gigi. Mencakup manajemen antrian, jadwal dokter, dan billing system.",
+    tech: ["CodeIgniter 4", "MySQL", "Bootstrap", "jQuery"],
+    // Ganti dengan link github aslimu
+    link: "https://github.com/achmadfikrihdytllh/Apex-Dental-Solution-Website", 
+    // Siapkan screenshot localhost atau gambar ilustrasi klinik
+    image: "/dentalweb.webp" 
+  },
+
+{ 
+    title: "JAPAN CAREER", 
+    category: "Recruitment System",
+    status: "PRIVATE",
+    type: "INTERNAL", 
+    description: "Backend API untuk job matching & user profiling.",
+    tech: ["AdonisJS", "PostgreSQL", "TypeScript"], 
+    link: null, 
+    image: "/Thumbnail.png" 
+  },
+
+  
+  { 
+    title: "PROJECT COMPENDIUM", 
+    category: "Personal Portfolio", 
+    status: "LIVE",
+    type: "PUBLIC", 
+    description: "Futuristic portfolio site with Astro & Tailwind.",
+    tech: ["Astro", "React", "Tailwind", "TypeScript"],
+    link: "https://github.com/achmadfikrihdytllh/compendium-portfolio", 
+    image: "/image.png" 
+  }
+];
+
+---
+
+<section id="projects" class="py-32 relative z-10 overflow-hidden">
+    
+    <div class="absolute top-20 left-0 w-full overflow-hidden opacity-5 pointer-events-none select-none">
+        <h3 class="text-[10rem] md:text-[15rem] font-black italic uppercase whitespace-nowrap -skew-x-12 text-white leading-none">
+            COMPENDIUM
+        </h3>
+    </div>
+
+    <div class="absolute right-[-50px] md:right-[-100px] top-1/2 -translate-y-1/2 w-[300px] md:w-[600px] pointer-events-none opacity-30 z-0">
+        <img src="/persona.png" alt="Persona" class="w-full h-full object-contain drop-shadow-[0_0_30px_rgba(0,100,255,0.4)]" />
+    </div>
+
+    <div class="max-w-6xl mx-auto px-6 relative z-10">
+        
+        <div class="flex flex-col md:flex-row items-start md:items-end justify-between mb-20 gap-6 border-b-4 border-cyan-500/50 pb-6">
+            <div>
+                <div class="text-cyan-400 font-mono tracking-widest mb-2">// SELECTED WORKS</div>
+                <h2 class="text-5xl md:text-6xl font-black italic uppercase tracking-tighter text-white -skew-x-12 drop-shadow-[4px_4px_0_#000]">
+                    Project <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-white">Compendium</span>
+                </h2>
+            </div>
+            
+            <a href="https://github.com/achmadfikrihdytllh" target="_blank" class="px-8 py-3 bg-white text-black font-bold uppercase tracking-widest -skew-x-12 hover:bg-cyan-400 transition-colors shadow-[4px_4px_0_#00f0ff] group">
+                <span class="inline-block group-hover:skew-x-12 transition-transform">View GitHub Access</span>
+            </a>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+            
+            {projects.map((project) => (
+                <div class="group relative h-full flex flex-col">
+                    
+                    <div class="absolute inset-0 border-2 border-gray-700 bg-[#000a12]/90 -skew-x-6 transition-all duration-300 group-hover:border-cyan-400 group-hover:shadow-[0_0_30px_rgba(0,240,255,0.2)]"></div>
+                    
+                    <div class="relative z-10 p-6 flex flex-col h-full -skew-x-6">
+                        
+                        <div class="h-48 w-[105%] -ml-[2.5%] bg-black mb-6 overflow-hidden border-b-2 border-cyan-500/30 relative group-hover:border-cyan-400 transition-colors">
+                            
+                            {project.type === 'INTERNAL' && (
+                                <div class="absolute inset-0 z-20 bg-black/60 flex items-center justify-center backdrop-blur-[2px]">
+                                    <div class="border-2 border-red-500/50 text-red-500 px-4 py-1 font-mono font-bold tracking-widest text-sm -rotate-12 bg-black/80 shadow-[0_0_15px_rgba(255,0,0,0.4)]">
+                                        TOP SECRET // INTERNAL
+                                    </div>
+                                </div>
+                            )}
+
+                            <div class="absolute inset-0 bg-cyan-500/10 mix-blend-overlay z-10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                            
+                            <img 
+                                src={project.image} 
+                                alt={project.title} 
+                                class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500 transform group-hover:scale-110" 
+                                onerror="this.style.display='none'"
+                            />
+                        </div>
+
+                        <div class="flex justify-between items-start mb-2">
+                            <div class="text-xs font-bold text-cyan-400 tracking-widest uppercase">
+                                // {project.category}
+                            </div>
+                            <span class={`text-[10px] font-bold px-2 py-0.5 border ${project.type === 'INTERNAL' ? 'text-red-400 border-red-900 bg-red-900/20' : 'text-green-400 border-green-900 bg-green-900/20'}`}>
+                                {project.status}
+                            </span>
+                        </div>
+
+                        <h3 class="text-2xl font-black italic uppercase text-white mb-3 group-hover:text-cyan-300 transition-colors leading-tight">
+                            {project.title}
+                        </h3>
+
+                        <p class="text-gray-400 text-sm leading-relaxed mb-6 flex-grow border-l-2 border-gray-800 pl-3 group-hover:border-cyan-500/50 transition-colors">
+                            {project.description}
+                        </p>
+
+                        <div class="flex flex-wrap gap-2 mb-6">
+                            {project.tech.map((t) => (
+                                <span class="px-2 py-1 bg-gray-900 border border-gray-700 text-[10px] font-bold text-gray-300 uppercase hover:border-cyan-500 hover:text-cyan-300 transition-colors cursor-default">
+                                    {t}
+                                </span>
+                            ))}
+                        </div>
+
+                        <div class="mt-auto pt-4 border-t border-gray-800">
+                            {project.link ? (
+                                // PUBLIC: Clickable Link
+                                <a href={project.link} target="_blank" class="flex items-center gap-2 text-cyan-400 font-bold uppercase tracking-wider group/link hover:text-white transition-colors">
+                                    <span>INSPECT DATA</span>
+                                    <svg class="w-4 h-4 transform group-hover/link:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                                </a>
+                            ) : (
+                                // INTERNAL: Locked / Non-clickable
+                                <div class="flex items-center gap-2 text-red-500/70 font-bold uppercase tracking-wider cursor-not-allowed">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                                    <span>RESTRICTED ACCESS</span>
+                                </div>
+                            )}
+                        </div>
+
+                    </div>
+                </div>
+            ))}
+
+        </div>
+    </div>
+</section>

@@ -1,0 +1,55 @@
+<div class="bubbles-container fixed inset-0 pointer-events-none z-0">
+    <div class="bubble b1"></div>
+    <div class="bubble b2"></div>
+    <div class="bubble b3"></div>
+    <div class="bubble b4"></div>
+    <div class="bubble b5"></div>
+    <div class="bubble b6"></div>
+    <div class="bubble b7"></div>
+    <div class="bubble b8"></div>
+</div>
+
+<style>
+    .bubbles-container {
+        overflow: hidden;
+        width: 100%;
+        height: 100%;
+    }
+
+    .bubble {
+        position: absolute;
+        bottom: -100px;
+        background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.2), transparent 70%);
+        border-radius: 50%;
+        opacity: 0.5;
+        animation: rise linear infinite;
+        box-shadow: inset 0 0 10px rgba(100, 255, 255, 0.1);
+    }
+
+
+    .b1 { width: 40px; height: 40px; left: 10%; animation-duration: 15s; animation-delay: 0s; opacity: 0.3; }
+    .b2 { width: 20px; height: 20px; left: 25%; animation-duration: 12s; animation-delay: 2s; opacity: 0.4; }
+    .b3 { width: 60px; height: 60px; left: 40%; animation-duration: 20s; animation-delay: 1s; opacity: 0.2; }
+    .b4 { width: 30px; height: 30px; left: 55%; animation-duration: 18s; animation-delay: 4s; opacity: 0.3; }
+    .b5 { width: 50px; height: 50px; left: 70%; animation-duration: 22s; animation-delay: 0.5s; opacity: 0.25; }
+    .b6 { width: 15px; height: 15px; left: 85%; animation-duration: 10s; animation-delay: 3s; opacity: 0.5; }
+    .b7 { width: 35px; height: 35px; left: 95%; animation-duration: 16s; animation-delay: 1s; opacity: 0.35; }
+    .b8 { width: 25px; height: 25px; left: 5%; animation-duration: 19s; animation-delay: 5s; opacity: 0.3; }
+
+    @keyframes rise {
+        0% {
+            transform: translateY(0) translateX(0);
+            opacity: 0;
+        }
+        10% {
+            opacity: var(--tw-opacity, 0.4);
+        }
+        50% {
+             transform: translateY(-50vh) translateX(20px);
+        }
+        100% {
+            transform: translateY(-120vh) translateX(-20px);
+            opacity: 0;
+        }
+    }
+</style>
