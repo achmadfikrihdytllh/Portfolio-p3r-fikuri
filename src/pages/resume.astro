@@ -1,0 +1,120 @@
+---
+// src/pages/resume.astro
+import MainLayout from '../layouts/MainLayout.astro';
+---
+
+<MainLayout title="Personnel Compendium | Inspection Mode">
+    <div class="min-h-screen bg-[#000510] relative overflow-hidden flex flex-col">
+        <div class="absolute inset-0 bg-[url('/noise.png')] opacity-5 pointer-events-none"></div>
+        <div class="absolute top-[-10%] right-[-10%] w-[500px] h-[500px] bg-blue-600/10 rounded-full blur-[120px]"></div>
+
+        <nav class="relative z-20 p-6 flex justify-between items-center border-b border-blue-500/30 bg-black/40 backdrop-blur-md">
+            <a href="/" class="group flex items-center gap-3 text-blue-400 font-black italic uppercase tracking-widest text-sm -skew-x-12">
+                <svg class="w-5 h-5 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                <span>Return to Lobby</span>
+            </a>
+            
+            <div class="flex flex-col items-end">
+                <span class="text-[10px] text-blue-500 font-mono tracking-[0.3em]">// SUBJECT_DATA_INSPECTION</span>
+                <h1 class="text-xl md:text-2xl font-black italic text-white uppercase tracking-tighter -skew-x-12">
+                    Personnel <span class="text-blue-400">Compendium</span>
+                </h1>
+            </div>
+        </nav>
+
+        <main class="flex-1 relative z-10 p-4 md:p-8 flex flex-col items-center justify-center">
+            <div class="w-full max-w-5xl h-[70vh] md:h-[85vh] bg-black/60 border-2 border-blue-500/30 relative group shadow-[0_0_50px_rgba(0,100,255,0.1)] -skew-x-1">
+                <div class="absolute -top-1 -left-1 w-4 h-4 border-t-2 border-l-2 border-blue-400"></div>
+                <div class="absolute -bottom-1 -right-1 w-4 h-4 border-b-2 border-r-2 border-blue-400"></div>
+
+                <iframe 
+                    src="/CV.pdf#toolbar=0" 
+                    class="w-full h-full grayscale-[0.2] hover:grayscale-0 transition-all duration-700"
+                    title="Curriculum Vitae Inspection"
+                ></iframe>
+            </div>
+
+            <div class="mt-8 flex gap-6 relative z-20">
+                <a 
+                    href="/CV.pdf" 
+                    download
+                    class="px-10 py-3 bg-blue-600 text-white font-black italic uppercase tracking-widest -skew-x-12 hover:bg-white hover:text-blue-950 transition-all shadow-[4px_4px_0_rgba(255,255,255,0.2)]"
+                >
+                    Finalize Contract (Download)
+                </a>
+            </div>
+        </main>
+
+        <div class="fixed bottom-6 right-6 z-50 pointer-events-auto">
+            <div class="bg-black/80 border-2 border-blue-500 -skew-x-12 px-4 py-2 flex items-center gap-4 shadow-[0_0_15px_rgba(0,100,255,0.4)]">
+                <button id="bgm-toggle" class="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center text-black hover:bg-white transition-colors">
+                    <svg id="play-icon" class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                    <svg id="pause-icon" class="hidden w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+                </button>
+                <div class="flex flex-col">
+                    <span class="text-[9px] text-blue-400 font-mono tracking-widest uppercase">BGM // ACTIVE</span>
+                    <span class="text-sm font-black italic text-white uppercase tracking-tighter">Aria of the Soul</span>
+                </div>
+                <div class="flex gap-1 h-3 items-end">
+                    <div class="w-1 bg-blue-400 animate-[music-bar_0.8s_ease-in-out_infinite]"></div>
+                    <div class="w-1 bg-blue-400 animate-[music-bar_1.2s_ease-in-out_infinite]"></div>
+                    <div class="w-1 bg-blue-400 animate-[music-bar_1s_ease-in-out_infinite]"></div>
+                </div>
+            </div>
+        </div>
+
+        <audio id="velvet-bgm" loop>
+            <source src="/全ての人の魂の詩.mp3" type="audio/mpeg">
+        </audio>
+
+        <footer class="p-4 text-center border-t border-blue-900/30 bg-black/20">
+            <p class="text-[9px] text-blue-900 font-mono tracking-[0.5em] uppercase animate-pulse">
+                // System Status: Secured // Reading Subject Data...
+            </p>
+        </footer>
+    </div>
+</Layout>
+
+<script>
+    const audio = document.getElementById('velvet-bgm') as HTMLAudioElement;
+    const btn = document.getElementById('bgm-toggle');
+    const playIcon = document.getElementById('play-icon');
+    const pauseIcon = document.getElementById('pause-icon');
+
+    // Autoplay logic (beberapa browser memblokir ini jika belum ada interaksi)
+    window.addEventListener('load', () => {
+        audio.volume = 0.5;
+        audio.play().then(() => {
+            updateUI(true);
+        }).catch(() => {
+            console.log("Autoplay blocked, waiting for user interaction.");
+        });
+    });
+
+    btn?.addEventListener('click', () => {
+        if (audio.paused) {
+            audio.play();
+            updateUI(true);
+        } else {
+            audio.pause();
+            updateUI(false);
+        }
+    });
+
+    function updateUI(isPlaying: boolean) {
+        if (isPlaying) {
+            playIcon?.classList.add('hidden');
+            pauseIcon?.classList.remove('hidden');
+        } else {
+            playIcon?.classList.remove('hidden');
+            pauseIcon?.classList.add('hidden');
+        }
+    }
+</script>
+
+<style>
+    @keyframes music-bar {
+        0%, 100% { height: 4px; }
+        50% { height: 12px; }
+    }
+</style>

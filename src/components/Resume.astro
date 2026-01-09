@@ -23,14 +23,13 @@
             </div>
 
             <p class="text-blue-100/80 text-lg md:text-xl mb-10 leading-relaxed italic relative z-20">
-                "Welcome to the Velvet Room. This document records the growth and technical capabilities of your guest. Will you establish this bond?"
+                "Accessing Personnel Records. This documentation details the technical proficiency and career progression of the developer. Proceed to initialize a professional partnership?"
             </p>
 
             <div class="flex flex-col md:flex-row gap-8 justify-center items-center relative z-20">
                 <a 
                     id="btn-sign-contract"
-                    href="/CV.pdf" 
-                    download
+                    href="/resume" 
                     class="relative px-12 py-5 bg-blue-900/30 border-2 border-blue-400 text-blue-300 font-black uppercase tracking-[0.25em] overflow-hidden hover:text-white transition-all duration-500 group/btn shadow-[0_0_20px_rgba(59,130,246,0.3)]"
                 >
                     <span class="absolute inset-0 w-full h-full bg-gradient-to-r from-blue-600 to-blue-400 transform scale-x-0 origin-left group-hover/btn:scale-x-100 transition-transform duration-500 ease-out"></span>
@@ -81,12 +80,22 @@
     const btnSign = document.getElementById('btn-sign-contract');
     if (btnSign) {
         btnSign.addEventListener('click', (e: MouseEvent) => {
+            // Mencegah perpindahan halaman instan agar animasi sempat berjalan
+            e.preventDefault();
+            const targetUrl = (e.currentTarget as HTMLAnchorElement).href;
+            
             const startX = e.clientX;
             const startY = e.clientY;
             
+            // Trigger animasi kupu-kupu
             for (let i = 0; i < 15; i++) {
                 setTimeout(() => createButterfly(startX, startY), i * 40);
             }
+
+            // Berpindah ke halaman inspeksi setelah jeda singkat
+            setTimeout(() => {
+                window.location.href = targetUrl;
+            }, 700);
         });
     }
 </script>
