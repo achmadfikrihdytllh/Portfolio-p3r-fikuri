@@ -23,7 +23,7 @@
             </div>
 
             <p class="text-blue-100/80 text-lg md:text-xl mb-10 leading-relaxed italic relative z-20">
-                "Accessing Personnel Records. This documentation details the technical proficiency and career progression of the developer. Proceed to initialize a professional partnership?"
+                "Accessing Personnel Records. This documentation details the technical proficiency and career progression of the developer. Proceed to initialize a professional partnership?"?"
             </p>
 
             <div class="flex flex-col md:flex-row gap-8 justify-center items-center relative z-20">
@@ -80,19 +80,14 @@
     const btnSign = document.getElementById('btn-sign-contract');
     if (btnSign) {
         btnSign.addEventListener('click', (e: MouseEvent) => {
-            // Mencegah perpindahan halaman instan agar animasi sempat berjalan
             e.preventDefault();
             const targetUrl = (e.currentTarget as HTMLAnchorElement).href;
             
             const startX = e.clientX;
             const startY = e.clientY;
-            
-            // Trigger animasi kupu-kupu
             for (let i = 0; i < 15; i++) {
                 setTimeout(() => createButterfly(startX, startY), i * 40);
             }
-
-            // Berpindah ke halaman inspeksi setelah jeda singkat
             setTimeout(() => {
                 window.location.href = targetUrl;
             }, 700);

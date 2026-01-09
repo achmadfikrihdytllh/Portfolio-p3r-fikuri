@@ -3,7 +3,7 @@
 import MainLayout from '../layouts/MainLayout.astro';
 ---
 
-<MainLayout title="Personnel Compendium | Inspection Mode">
+<MainLayout title="Personnel Compendium | Inspection Mode" isVelvetRoom={true}>
     <div class="min-h-screen bg-[#000510] relative overflow-hidden flex flex-col">
         <div class="absolute inset-0 bg-[url('/noise.png')] opacity-5 pointer-events-none"></div>
         <div class="absolute top-[-10%] right-[-10%] w-[500px] h-[500px] bg-blue-600/10 rounded-full blur-[120px]"></div>
@@ -15,7 +15,7 @@ import MainLayout from '../layouts/MainLayout.astro';
             </a>
             
             <div class="flex flex-col items-end">
-                <span class="text-[10px] text-blue-500 font-mono tracking-[0.3em]">SUBJECT DATAI NSPECTION</span>
+                <span class="text-[10px] text-blue-500 font-mono tracking-[0.3em]">SUBJECT DATA INSPECTION</span>
                 <h1 class="text-xl md:text-2xl font-black italic text-white uppercase tracking-tighter -skew-x-12">
                     Personnel <span class="text-blue-400">Compendium</span>
                 </h1>
@@ -47,9 +47,9 @@ import MainLayout from '../layouts/MainLayout.astro';
 
         <div class="fixed bottom-6 right-6 z-50 pointer-events-auto">
             <div class="bg-black/80 border-2 border-blue-500 -skew-x-12 px-4 py-2 flex items-center gap-4 shadow-[0_0_15px_rgba(0,100,255,0.4)]">
-                <button id="bgm-toggle" class="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center text-black hover:bg-white transition-colors">
-                    <svg id="play-icon" class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-                    <svg id="pause-icon" class="hidden w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+                <button id="bgm-toggle-velvet" class="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center text-black hover:bg-white transition-colors">
+                    <svg id="play-icon-velvet" class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                    <svg id="pause-icon-velvet" class="hidden w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
                 </button>
                 <div class="flex flex-col">
                     <span class="text-[9px] text-blue-400 font-mono tracking-widest uppercase">BGM ACTIVE</span>
@@ -69,46 +69,66 @@ import MainLayout from '../layouts/MainLayout.astro';
 
         <footer class="p-4 text-center border-t border-blue-900/30 bg-black/20">
             <p class="text-[9px] text-blue-900 font-mono tracking-[0.5em] uppercase animate-pulse">
-                 System Status: Secured|Reading Subject Data...
+                System Status: Secured|Reading Subject Data...
             </p>
         </footer>
     </div>
-</Layout>
+</MainLayout>
 
 <script>
-    const audio = document.getElementById('velvet-bgm') as HTMLAudioElement;
-    const btn = document.getElementById('bgm-toggle');
-    const playIcon = document.getElementById('play-icon');
-    const pauseIcon = document.getElementById('pause-icon');
+    function initVelvetPlayer() {
+        const audio = document.getElementById('velvet-bgm') as HTMLAudioElement;
+        const btn = document.getElementById('bgm-toggle-velvet');
+        const playIcon = document.getElementById('play-icon-velvet');
+        const pauseIcon = document.getElementById('pause-icon-velvet');
 
-    window.addEventListener('load', () => {
+        if (!audio) return;
+
         audio.volume = 0.5;
+
+        const lobbyAudio = document.getElementById('bgm-audio') as HTMLAudioElement;
+        if (lobbyAudio) {
+            lobbyAudio.pause();
+            lobbyAudio.currentTime = 0;
+        }
+
         audio.play().then(() => {
             updateUI(true);
         }).catch(() => {
-            console.log("Autoplay blocked, waiting for user interaction.");
-        });
-    });
-
-    btn?.addEventListener('click', () => {
-        if (audio.paused) {
-            audio.play();
-            updateUI(true);
-        } else {
-            audio.pause();
             updateUI(false);
-        }
-    });
+        });
 
-    function updateUI(isPlaying: boolean) {
-        if (isPlaying) {
-            playIcon?.classList.add('hidden');
-            pauseIcon?.classList.remove('hidden');
-        } else {
-            playIcon?.classList.remove('hidden');
-            pauseIcon?.classList.add('hidden');
+        btn?.addEventListener('click', () => {
+            if (audio.paused) {
+                audio.play();
+                updateUI(true);
+            } else {
+                audio.pause();
+                updateUI(false);
+            }
+        });
+
+        function updateUI(isPlaying: boolean) {
+            if (isPlaying) {
+                playIcon?.classList.add('hidden');
+                pauseIcon?.classList.remove('hidden');
+            } else {
+                playIcon?.classList.remove('hidden');
+                pauseIcon?.classList.add('hidden');
+            }
         }
     }
+
+    document.addEventListener('DOMContentLoaded', initVelvetPlayer);
+    document.addEventListener('astro:after-swap', initVelvetPlayer);
+
+    document.addEventListener('astro:before-swap', () => {
+        const audio = document.getElementById('velvet-bgm') as HTMLAudioElement;
+        if (audio) {
+            audio.pause();
+            audio.currentTime = 0;
+        }
+    });
 </script>
 
 <style>
