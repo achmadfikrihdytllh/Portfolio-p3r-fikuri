@@ -4,6 +4,7 @@ import Bubbles from '../components/Bubbles.astro';
 import MusicPlayer from '../components/MusicPlayer.astro';
 import Navbar from '../components/Navbar.astro';
 import { ViewTransitions } from 'astro:transitions';
+import ProjectModal from "../components/ProjectModal.astro";
 
 const { title } = Astro.props;
 ---
@@ -30,10 +31,10 @@ const { title } = Astro.props;
         <div class="fixed inset-0 z-[-2] bg-[linear-gradient(135deg,transparent_0%,rgba(255,255,255,0.1)_30%,transparent_60%)] pointer-events-none"></div>
 
         <Navbar />
-
         <MusicPlayer />
-
         <Bubbles />
+        
+        <ProjectModal />
 
         <div class="fixed inset-0 pointer-events-none z-[-1] bg-[radial-gradient(circle_at_center,transparent_20%,#000515_120%)] opacity-20"></div>
 

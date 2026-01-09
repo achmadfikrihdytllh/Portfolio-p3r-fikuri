@@ -1,0 +1,105 @@
+---
+---
+
+<section id="resume" class="py-24 relative overflow-hidden bg-gradient-to-b from-[#000510] to-blue-950/80">
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-blue-600/10 rounded-full blur-[150px] pointer-events-none z-0"></div>
+    
+    <div class="max-w-4xl mx-auto px-6 relative z-10 text-center">
+        <div class="inline-block mb-10 group">
+            <div class="flex items-center gap-4 mb-3 justify-center">
+                <div class="h-[1px] w-12 bg-blue-400"></div>
+                <span class="text-blue-300 font-mono tracking-[0.3em] text-[10px] md:text-xs uppercase">Formal Contract // Velvet Protocol</span>
+                <div class="h-[1px] w-12 bg-blue-400"></div>
+            </div>
+            <h2 class="text-4xl md:text-6xl font-black italic uppercase text-white -skew-x-12 tracking-tighter drop-shadow-[0_0_15px_rgba(59,130,246,0.5)]">
+                Personnel <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-blue-200 to-white">Compendium</span>
+            </h2>
+        </div>
+
+        <div class="bg-[#000a15]/80 border border-blue-500/30 backdrop-blur-xl p-10 md:p-14 -skew-x-3 relative group overflow-hidden shadow-[0_0_30px_rgba(0,100,255,0.15)]">
+            
+            <div class="absolute inset-0 rounded-sm overflow-hidden pointer-events-none z-0">
+                <div class="absolute top-[-50%] left-[-50%] w-[200%] h-[200%] bg-[conic-gradient(transparent,rgba(59,130,246,0.4),transparent_30%)] animate-[spin_4s_linear_infinite] opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+            </div>
+
+            <p class="text-blue-100/80 text-lg md:text-xl mb-10 leading-relaxed italic relative z-20">
+                "Welcome to the Velvet Room. This document records the growth and technical capabilities of your guest. Will you establish this bond?"
+            </p>
+
+            <div class="flex flex-col md:flex-row gap-8 justify-center items-center relative z-20">
+                <a 
+                    id="btn-sign-contract"
+                    href="/CV.pdf" 
+                    download
+                    class="relative px-12 py-5 bg-blue-900/30 border-2 border-blue-400 text-blue-300 font-black uppercase tracking-[0.25em] overflow-hidden hover:text-white transition-all duration-500 group/btn shadow-[0_0_20px_rgba(59,130,246,0.3)]"
+                >
+                    <span class="absolute inset-0 w-full h-full bg-gradient-to-r from-blue-600 to-blue-400 transform scale-x-0 origin-left group-hover/btn:scale-x-100 transition-transform duration-500 ease-out"></span>
+                    <span class="relative z-10 flex items-center gap-3 pointer-events-none">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
+                        Sign the Contract
+                    </span>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    function createButterfly(x: number, y: number) {
+        const butterfly = document.createElement('div');
+        butterfly.className = 'velvet-butterfly-particle';
+        
+        butterfly.innerHTML = `
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="#60A5FA" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 20L11 18.5C7.5 19 4 17 4 12C4 8.5 7.5 5 11 5.5L12 7L13 5.5C16.5 5 20 8.5 20 12C20 17 16.5 19 13 18.5L12 20Z" style="filter: drop-shadow(0 0 10px #60A5FA)"/>
+            </svg>
+        `;
+
+        butterfly.style.left = x + 'px';
+        butterfly.style.top = y + 'px';
+
+        const destX = (Math.random() - 0.5) * 500;
+        const destY = -Math.random() * 400 - 150;
+        const rot = (Math.random() - 0.5) * 360;
+        const duration = 2000 + Math.random() * 1000;
+
+        document.body.appendChild(butterfly);
+
+        butterfly.animate([
+            { transform: 'translate(-50%, -50%) scale(0) rotate(0deg)', opacity: 0 },
+            { transform: 'translate(-50%, -50%) scale(1) rotate(0deg)', opacity: 1, offset: 0.15 },
+            { transform: `translate(calc(-50% + ${destX}px), calc(-50% + ${destY}px)) scale(2.5) rotate(${rot}deg)`, opacity: 0 }
+        ], {
+            duration: duration,
+            easing: 'cubic-bezier(0.1, 0, 0.3, 1)',
+            fill: 'forwards'
+        });
+
+        setTimeout(() => butterfly.remove(), duration);
+    }
+
+    const btnSign = document.getElementById('btn-sign-contract');
+    if (btnSign) {
+        btnSign.addEventListener('click', (e: MouseEvent) => {
+            const startX = e.clientX;
+            const startY = e.clientY;
+            
+            for (let i = 0; i < 15; i++) {
+                setTimeout(() => createButterfly(startX, startY), i * 40);
+            }
+        });
+    }
+</script>
+
+<style is:global>
+    .velvet-butterfly-particle {
+        position: fixed;
+        z-index: 100000;
+        pointer-events: none;
+        width: 30px;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+</style>

@@ -1,14 +1,18 @@
 ---
 import MainLayout from '../layouts/MainLayout.astro';
 import Skills from '../components/Skills.astro';
+import Resume from '../components/Resume.astro'; // Import komponen baru
 import Projects from '../components/Projects.astro';
 import Contact from '../components/Contact.astro';
 import SummonIntro from '../components/SummonIntro.astro';
+import Calendar from '../components/Calendar.astro'; 
 ---
 
 <MainLayout title="Portfolio | Fikuri Olenyeva">
     
     <SummonIntro />
+    
+    <Calendar />
     
     <main class="min-h-screen flex items-center justify-center p-4 relative z-20 overflow-hidden">
         
@@ -35,11 +39,11 @@ import SummonIntro from '../components/SummonIntro.astro';
 
                 </div>
 
-<div class="flex-1 text-center md:text-left relative z-20">
+                <div class="flex-1 text-center md:text-left relative z-20">
                     <div id="current-date" class="text-cyan-400 text-sm md:text-base font-bold tracking-[0.2em] mb-2 font-mono shadow-black drop-shadow-md">// INITIALIZING...</div>
-                    <h2 class="text-lg md:text-2xl font-bold uppercase tracking-widest text-gray-300 -skew-x-12 mb-[-5px]">Achmad Fikri Hidayatullah</h2>
+                    <h2 class="text-lg md:text-2xl font-bold uppercase tracking-widest text-gray-300 -skew-x-12 mb-[-5px]">Fikuri Olenyeva</h2>
                     <h1 class="text-5xl md:text-7xl font-black italic uppercase tracking-tighter -skew-x-12 text-white drop-shadow-[3px_3px_0_#000]">
-                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-cyan-200 to-white">FIKURI OLENYEVA</span>
+                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-cyan-200 to-white">Achmad Fikri Hidayatullah</span>
                     </h1>
                     <div class="mt-6 inline-flex items-center bg-white text-black px-6 py-2 -skew-x-12 border-l-8 border-cyan-500 shadow-[0_0_15px_rgba(0,240,255,0.6)]">
                         <span class="text-xl md:text-2xl font-black uppercase tracking-widest skew-x-12 md:skew-x-0">Backend Developer</span>
@@ -53,17 +57,22 @@ import SummonIntro from '../components/SummonIntro.astro';
                         </a>
                     </div>
                 </div>
-                        </a>
-                    </div>
-                </div>
+            </div>
 
-<div id="orpheus-container" class="absolute right-0 md:-right-80 top-[40%] -translate-y-1/2 w-[400px] md:w-[850px] pointer-events-none z-0 opacity-0 translate-x-20 scale-95 transition-all duration-[2000ms] ease-out hidden lg:block">
-    <img src="/thanatos.png" alt="Persona" class="w-full h-full object-contain filter drop-shadow-[0_0_30px_rgba(0,240,255,0.2)] mix-blend-normal opacity-100" />
-</div>
+            <div id="orpheus-container" class="absolute right-0 md:-right-80 top-[40%] -translate-y-1/2 w-[400px] md:w-[850px] pointer-events-none z-0 opacity-0 translate-x-20 scale-95 transition-all duration-[2000ms] ease-out hidden lg:block">
+                <img src="/thanatos.png" alt="Persona" class="w-full h-full object-contain filter drop-shadow-[0_0_30px_rgba(0,240,255,0.2)] mix-blend-normal opacity-100" />
+            </div>
+        </div>
     </main>
 
     <div class="relative z-10 bg-black/40 backdrop-blur-sm border-y border-cyan-900/50"><Skills /></div>
+
+    <div class="relative z-10 border-b border-blue-900/30 shadow-[0_0_30px_rgba(0,100,255,0.1)]">
+        <Resume />
+    </div>
+
     <div class="relative z-10"><Projects /></div>
+
     <div class="relative z-10 border-t border-gray-800"><Contact /></div>
 
     <footer class="py-10 text-center text-gray-500 font-mono text-sm relative z-10 border-t border-gray-800 bg-black">
@@ -72,6 +81,12 @@ import SummonIntro from '../components/SummonIntro.astro';
 
     <script>
         document.addEventListener('personaSummoned', () => {
+            const calendar = document.getElementById('p3-calendar-root');
+            if (calendar) {
+                calendar.classList.remove('opacity-0', 'pointer-events-none');
+                calendar.classList.add('opacity-100');
+            }
+
             const gun = document.getElementById('evoker-gun');
             if (gun) {
                 gun.style.transform = 'translateX(-50px) rotate(-45deg) scale(0.9)';

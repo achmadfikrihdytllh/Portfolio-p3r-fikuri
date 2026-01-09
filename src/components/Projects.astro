@@ -7,52 +7,64 @@ const projects = [
     category: "Internal System",
     status: "COMPLETE",
     type: "INTERNAL", 
-    description: "Pengembangan sistem Backend presensi karyawan berbasis REST API menggunakan AdonisJS (TypeScript) dan PostgreSQL. Sistem ini menangani pencatatan kehadiran real-time dengan dukungan Multi-Timezone, integrasi penyimpanan bukti foto (Signed URLs), serta fitur manajemen koreksi data oleh Admin yang menggunakan Database Transactions untuk menjamin integritas data. Sistem ini dirancang untuk skalabilitas tinggi dan kemudahan integrasi dengan layanan internal lainnya.",
+    arcana: "/arcana/Justice.png", 
+    description: "Pengembangan sistem Backend presensi karyawan berbasis REST API menggunakan AdonisJS (TypeScript) dan PostgreSQL.",
     tech: ["AdonisJS", "PostgreSQL", "REST API", "TypeScript"],
     link: null, 
-    image: "/project1.jpg" 
+    image: "/project1.jpg", 
+    fullDescription: "Pengembangan sistem Backend presensi karyawan berbasis REST API menggunakan AdonisJS (TypeScript) dan PostgreSQL. Sistem ini menangani pencatatan kehadiran real-time dengan dukungan Multi-Timezone, integrasi penyimpanan bukti foto (Signed URLs), serta fitur manajemen koreksi data oleh Admin yang menggunakan Database Transactions untuk menjamin integritas data.",
+    features: ["RESTful API Architecture", "JWT Authentication", "Role-based Access Control", "Automated Attendance Logs"],
+    gallery: ["/project1.png", "/project1.png"]
   },
   
   { 
     title: "DENTAL CLINIC SYSTEM", 
     category: "Legacy Monolith", 
     status: "OPEN SOURCE",
-    type: "PUBLIC", // Bisa diklik ke GitHub
+    type: "PUBLIC", 
+    arcana: "/arcana/Hierophant-0.png",
     description: "Sistem reservasi pasien dan rekam medis klinik gigi. Mencakup manajemen antrian, jadwal dokter, dan billing system.",
     tech: ["CodeIgniter 4", "MySQL", "Bootstrap", "jQuery"],
-    // Ganti dengan link github aslimu
     link: "https://github.com/achmadfikrihdytllh/Apex-Dental-Solution-Website", 
-    // Siapkan screenshot localhost atau gambar ilustrasi klinik
-    image: "/dentalweb.webp" 
+    image: "/dentalweb.webp",
+    fullDescription: "Solusi manajemen klinik terintegrasi yang mendigitalisasi proses rekam medis dan reservasi pasien.",
+    features: ["Queue System", "Medical Records", "Billing Management"],
+    gallery: ["/dental-clinic1.png", "/dental-clinic2.png", "/dental-clinic3.png", "/dental-clinic4.png", "/dental-clinic5.png", "/dental-clinic6.png", "/dental-clinic7.png", "/dental-clinic8.png", "/dental-clinic9.png"]
   },
 
-{ 
+  { 
     title: "JAPAN CAREER", 
     category: "Recruitment System",
     status: "PRIVATE",
     type: "INTERNAL", 
-    description: "Backend API untuk job matching & user profiling.",
+    arcana: "/arcana/Chariot-0.png",
+    description: "Backend API untuk job matching & user profiling platform rekrutmen Jepang.",
     tech: ["AdonisJS", "PostgreSQL", "TypeScript"], 
     link: null, 
-    image: "/Thumbnail.png" 
+    image: "/Thumbnail.png",
+    fullDescription: "Sistem backend skala besar yang mengelola pencocokan kandidat dengan pekerjaan di Jepang berdasarkan profil user.",
+    features: ["Matching Algorithm", "Candidate Profiling", "Data Query Optimization"],
+    gallery: ["/Thumbnail.png"]
   },
 
-  
   { 
     title: "PROJECT COMPENDIUM", 
     category: "Personal Portfolio", 
     status: "LIVE",
     type: "PUBLIC", 
-    description: "Futuristic portfolio site with Astro & Tailwind.",
+    arcana: "/arcana/Fool-0.png",
+    description: "Futuristic portfolio site with Astro & Tailwind inspired by Persona 3 UI.",
     tech: ["Astro", "React", "Tailwind", "TypeScript"],
-    link: "https://github.com/achmadfikrihdytllh/compendium-portfolio", 
-    image: "/image.png" 
+    link: "https://github.com/achmadfikrihdytllh/Portfolio-p3r-fikuri", 
+    image: "/image.png",
+    fullDescription: "Eksperimen desain antarmuka futuristik yang menggabungkan framework Astro dengan estetika Persona 3 Reload.",
+    features: ["SSG Performance", "Dynamic Transitions", "Responsive Layout"],
+    gallery: ["/image.png"]
   }
 ];
-
 ---
 
-<section id="projects" class="py-31 relative z-10 overflow-hidden">
+<section id="projects" class="py-34 relative z-10 overflow-hidden scroll-mt-30">
     
     <div class="absolute top-20 left-0 w-full overflow-hidden opacity-5 pointer-events-none select-none">
         <h3 class="text-[10rem] md:text-[15rem] font-black italic uppercase whitespace-nowrap -skew-x-12 text-white leading-none">
@@ -64,7 +76,7 @@ const projects = [
         <img src="/persona.png" alt="Persona" class="w-full h-full object-contain drop-shadow-[0_0_30px_rgba(0,100,255,0.4)]" />
     </div>
 
-    <div class="max-w-6xl mx-auto px-6 relative z-10">
+    <div class="max-w-7xl mx-auto px-6 relative z-10">
         
         <div class="flex flex-col md:flex-row items-start md:items-end justify-between mb-20 gap-6 border-b-4 border-cyan-500/50 pb-6">
             <div>
@@ -90,6 +102,16 @@ const projects = [
                         
                         <div class="h-48 w-[105%] -ml-[2.5%] bg-black mb-6 overflow-hidden border-b-2 border-cyan-500/30 relative group-hover:border-cyan-400 transition-colors">
                             
+                            <div class="absolute top-0 left-0 z-30 pointer-events-none group-hover:scale-110 transition-transform duration-500">
+                                <div class="absolute inset-0 bg-gradient-to-br from-cyan-600 to-blue-900 -translate-x-3 -translate-y-3 -skew-x-12 w-12 h-12 md:w-16 md:h-16 shadow-[4px_4px_15px_rgba(0,0,0,0.5)] border-r-2 border-white/30"></div>
+                                
+                                <img 
+                                    src={project.arcana} 
+                                    alt="Arcana Icon" 
+                                    class="relative z-10 w-10 h-10 md:w-12 md:h-12 m-1 md:m-2 object-contain drop-shadow-[0_0_8px_rgba(255,255,255,0.6)]"
+                                />
+                            </div>
+
                             {project.type === 'INTERNAL' && (
                                 <div class="absolute inset-0 z-20 bg-black/60 flex items-center justify-center backdrop-blur-[2px]">
                                     <div class="border-2 border-red-500/50 text-red-500 px-4 py-1 font-mono font-bold tracking-widest text-sm -rotate-12 bg-black/80 shadow-[0_0_15px_rgba(255,0,0,0.4)]">
@@ -121,7 +143,7 @@ const projects = [
                             {project.title}
                         </h3>
 
-                        <p class="text-gray-400 text-sm leading-relaxed mb-6 flex-grow border-l-2 border-gray-800 pl-3 group-hover:border-cyan-500/50 transition-colors">
+                        <p class="text-gray-400 text-sm leading-relaxed mb-6 flex-grow border-l-2 border-gray-800 pl-3 group-hover:border-cyan-500/50 transition-colors line-clamp-3">
                             {project.description}
                         </p>
 
@@ -133,16 +155,22 @@ const projects = [
                             ))}
                         </div>
 
-                        <div class="mt-auto pt-4 border-t border-gray-800">
+                        <div class="mt-auto pt-4 border-t border-gray-800 space-y-4">
+                            <button 
+                                class="open-detail-btn flex items-center gap-2 text-cyan-400 font-bold uppercase tracking-wider group/link hover:text-white transition-colors"
+                                data-project={JSON.stringify(project)}
+                            >
+                                <span>INSPECT DATA</span>
+                                <svg class="w-4 h-4 transform group-hover/link:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                            </button>
+
                             {project.link ? (
-                                // PUBLIC: Clickable Link
-                                <a href={project.link} target="_blank" class="flex items-center gap-2 text-cyan-400 font-bold uppercase tracking-wider group/link hover:text-white transition-colors">
-                                    <span>INSPECT DATA</span>
-                                    <svg class="w-4 h-4 transform group-hover/link:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                                <a href={project.link} target="_blank" class="flex items-center gap-2 text-white/50 text-xs font-bold uppercase tracking-widest hover:text-white transition-colors">
+                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                                    <span>SOURCE ACCESS</span>
                                 </a>
                             ) : (
-                                // INTERNAL: Locked / Non-clickable
-                                <div class="flex items-center gap-2 text-red-500/70 font-bold uppercase tracking-wider cursor-not-allowed">
+                                <div class="flex items-center gap-2 text-red-500/50 text-xs font-bold uppercase tracking-widest cursor-not-allowed">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
                                     <span>RESTRICTED ACCESS</span>
                                 </div>

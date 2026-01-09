@@ -1,9 +1,11 @@
 ---
+// src/components/Contact.astro
 const socialLinks = [
   {
     name: "LinkedIn",
     role: "Professional",
     arcana: "EMPEROR",
+    arcanaIcon: "/arcana/Emperor-0.png",
     link: "https://www.linkedin.com/in/achmad-fikri-hidayatullah-380197250", 
     color: "hover:border-blue-500",
     bg: "hover:bg-blue-900/30",
@@ -13,15 +15,27 @@ const socialLinks = [
     name: "GitHub",
     role: "Repository",
     arcana: "HERMIT",
+    arcanaIcon: "/arcana/Hermit-0.png",
     link: "https://github.com/achmadfikrihdytllh",
     color: "hover:border-gray-400",
     bg: "hover:bg-gray-800/50",
     icon: "💻"
   },
   {
+    name: "Email",
+    role: "Direct Contact",
+    arcana: "JUSTICE",
+    arcanaIcon: "/arcana/Justice.png",
+    link: "achfikrihidytllh@gmail.com", 
+    color: "hover:border-cyan-400",
+    bg: "hover:bg-cyan-900/30",
+    icon: "✉️"
+  },
+  {
     name: "Instagram",
     role: "Social Media",
     arcana: "HIEROPHANT",
+    arcanaIcon: "/arcana/Hierophant-0.png",
     link: "https://www.instagram.com/fikuri.olnyv",
     color: "hover:border-red-500",
     bg: "hover:bg-red-900/30",
@@ -34,7 +48,7 @@ const socialLinks = [
     
     <div class="absolute inset-0 bg-gradient-to-t from-cyan-900/20 to-transparent pointer-events-none"></div>
 
-    <div class="max-w-4xl mx-auto px-6 text-center relative z-10">
+    <div class="max-w-6xl mx-auto px-6 text-center relative z-10">
         
         <h2 class="text-4xl md:text-5xl font-black italic uppercase tracking-tighter text-white mb-2">
             Social <span class="text-cyan-400">Links</span>
@@ -43,11 +57,20 @@ const socialLinks = [
             // ESTABLISH NEW BONDS
         </p>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
             
             {socialLinks.map((social) => (
                 <a href={social.link} target="_blank" class={`group relative h-80 transition-all duration-300 transform hover:-translate-y-4`}>
                     
+                    <div class="absolute top-0 left-0 z-30 pointer-events-none group-hover:scale-110 transition-transform duration-500">
+                        <div class="absolute inset-0 bg-gradient-to-br from-cyan-600 to-blue-900 -translate-x-3 -translate-y-3 -skew-x-12 w-12 h-12 md:w-14 md:h-14 shadow-[4px_4px_15px_rgba(0,0,0,0.5)] border-r-2 border-white/30"></div>
+                        <img 
+                            src={social.arcanaIcon} 
+                            alt={`${social.arcana} Icon`} 
+                            class="relative z-10 w-8 h-8 md:w-10 md:h-10 m-1 md:m-2 object-contain drop-shadow-[0_0_8px_rgba(255,255,255,0.6)]"
+                        />
+                    </div>
+
                     <div class={`absolute inset-0 border-2 border-gray-600 bg-gray-900/80 -skew-x-3 transition-all duration-300 ${social.color} ${social.bg} group-hover:shadow-[0_0_30px_rgba(0,240,255,0.3)]`}></div>
                     
                     <div class="relative z-10 h-full flex flex-col items-center justify-between p-6 -skew-x-3">
@@ -79,9 +102,9 @@ const socialLinks = [
         </div>
 
         <div class="mt-20 p-6 border-2 border-dashed border-gray-700 inline-block bg-black/50 rotate-1 hover:rotate-0 transition-transform duration-300">
-            <p class="text-gray-300 text-sm">
+            <p class="text-gray-300 text-sm italic">
                 "I am Thou... and Thou art I..." <br>
-                <span class="text-cyan-400 font-bold">Let's build something incredible together.</span>
+                <span class="text-cyan-400 font-bold not-italic">Let's build something incredible together.</span>
             </p>
         </div>
 
