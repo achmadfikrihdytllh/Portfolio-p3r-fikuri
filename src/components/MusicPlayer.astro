@@ -39,6 +39,16 @@
         height: 20%;
         opacity: 0.3;
     }
+
+    /* Perbaikan Overlap Mobile: Sembunyikan UI saat chatbox aktif */
+    @media (max-width: 768px) {
+        #music-player-container.hide-on-chat {
+            opacity: 0 !important;
+            pointer-events: none;
+            transform: translateY(20px) !important;
+            transition: all 0.5s ease;
+        }
+    }
 </style>
 
 <script>
