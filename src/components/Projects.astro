@@ -60,6 +60,21 @@ const projects = [
     fullDescription: "Project Compendium adalah sebuah eksperimen desain antarmuka futuristik yang menggabungkan framework web modern dengan estetika ikonik dari video game Persona 3 Reload. Proyek ini berfungsi sebagai portofolio interaktif yang menonjolkan kemampuan pengembangan backend melalui visualisasi data yang tergamifikasi dan imersif.",
     features: ["Dynamic Day/Night Cycle & Dark Hour: Sistem tema dinamis yang berubah berdasarkan waktu nyata pengguna. Memasuki pukul 00:00 - 05:00, seluruh antarmuka akan bertransformasi menjadi Dark Hour Mode dengan palet warna hijau Tartarus dan elemen visual bulan yang mencekam.", "Aigis Dynamic Dialogue System: Fitur narasi interaktif menggunakan kotak dialog bergaya RPG. Sistem ini dilengkapi dengan efek typewriter dan potret karakter Aigis yang berubah secara otomatis berdasarkan waktu dan hari (Seragam sekolah pada jam kerja, gaun pada akhir pekan, dan perlengkapan tempur SEES saat Dark Hour).", "ser Parameters (Skill Radar): Visualisasi keahlian teknis (AdonisJS, Laravel, REST API, dll.) menggunakan grafik radar pentagon dan sistem peringkat (Rank 8-9), memberikan representasi kekuatan backend logic yang mudah dipahami dan estetis.", "Personnel Compendium (Resume Mode): Modul inspeksi data karier yang dirancang menyerupai dokumen rahasia militer, memberikan pengalaman membaca CV yang unik namun tetap fungsional.", "Background Music (BGM) System: Pemutar musik latar yang menyesuaikan trek berdasarkan waktu hari (Color Your Night untuk siang hari dan Dark Hour Theme untuk malam hari), lengkap dengan visualizer musik animasi dan kontrol pemutaran intuitif.", ],
     gallery: ["/portfolio/portfolio1.png", "/portfolio/portfolio6.png", "/portfolio/portfolio2.png", "/portfolio/portfolio3.png", "/portfolio/portfolio4.png", "/portfolio/portfolio5.png"]
+  },
+
+  {
+    title: "Ruang Kreasi", 
+    category: "Profile Company Architecture", 
+    status: "ONGOING",
+    type: "PUBLIC", 
+    arcana: "/arcana/Hermit-0.png",
+    description: "Sebuah Profile Company untuk Arsitek & Kontraktor yang mengedepankan estetika minimalis dan profesional.",
+    tech: ["Laravel", "MySQL", "Tailwind", "API"],
+    link: "https://github.com/achmadfikrihdytllh/Ruang-Kreasi",
+    image: "/ruangkreasi/Ruang-Kreasi.png",
+    fullDescription: "Ruang Kreasi adalah sebuah platform profil perusahaan yang dirancang khusus untuk firma arsitektur dan kontraktor. Situs ini menonjolkan estetika minimalis dan profesional, menampilkan portofolio proyek, layanan yang ditawarkan, serta informasi perusahaan dengan cara yang menarik secara visual dan mudah dinavigasi.",
+    features: ["Project Portfolio Showcase", "Service Listings", "Contact and Inquiry Forms"], 
+    gallery: ["/ruangkreasi/Ruang-Kreasi.png"]
   }
 ];
 ---
@@ -132,7 +147,7 @@ const projects = [
 
                         <div class="flex justify-between items-start mb-2">
                             <div class="text-xs font-bold text-cyan-400 tracking-widest uppercase">
-                                // {project.category}
+                                 {project.category}
                             </div>
                             <span class={`text-[10px] font-bold px-2 py-0.5 border ${project.type === 'INTERNAL' ? 'text-red-400 border-red-900 bg-red-900/20' : 'text-green-400 border-green-900 bg-green-900/20'}`}>
                                 {project.status}
