@@ -7,11 +7,10 @@
     class="fixed inset-0 z-[10000] hidden transition-all duration-300 opacity-0"
 >
     <div class="absolute inset-0 bg-[#000a12]/95 backdrop-blur-xl"></div>
-    
     <div class="absolute inset-0 pointer-events-none opacity-20 bg-[repeating-linear-gradient(45deg,#00f0ff,#00f0ff_1px,transparent_1px,transparent_10px)]"></div>
     
     <div class="absolute top-1/4 -left-20 text-[15rem] font-black italic text-white opacity-5 select-none pointer-events-none -rotate-12 uppercase leading-none">
-        DATA_SCAN
+        DATA SCAN
     </div>
 
     <div class="relative w-full h-full overflow-y-auto custom-modal-scroll">
@@ -38,14 +37,16 @@
                         <div class="relative group">
                             <div class="absolute -inset-2 bg-cyan-500/10 -skew-x-2 opacity-100"></div>
                             <div class="relative bg-black/40 border border-white/10 p-8 -skew-x-2 backdrop-blur-sm">
-                                <h3 class="text-cyan-400 font-black mb-6 tracking-widest text-lg bg-cyan-900/30 px-4 py-1 inline-block uppercase italic">ANALYSIS_REPORT</h3>
+                                <h3 class="text-cyan-400 font-black mb-6 tracking-widest text-lg bg-cyan-900/30 px-4 py-1 inline-block uppercase italic">ANALYSIS REPORT</h3>
                                 <p id="modal-desc" class="text-gray-200 text-lg leading-relaxed italic font-medium"></p>
                             </div>
                         </div>
                         
                         <div>
                             <h3 class="text-white font-black italic mb-8 tracking-widest text-lg border-b-2 border-white/20 pb-2 uppercase">CORE_SYSTEM_FEATURES</h3>
-                            <ul id="modal-features" class="grid grid-cols-1 gap-4"></ul>
+                            <div class="max-h-[300px] md:max-h-[400px] overflow-y-auto pr-4 custom-inner-scroll">
+                                <ul id="modal-features" class="grid grid-cols-1 gap-4"></ul>
+                            </div>
                         </div>
                     </div>
 
@@ -66,19 +67,15 @@
     </div>
 </div>
 
-<div 
-    id="lightbox-overlay" 
-    class="fixed inset-0 z-[11000] hidden items-center justify-center bg-black/95 backdrop-blur-xl cursor-zoom-out opacity-0 transition-opacity duration-300"
->
+<div id="lightbox-overlay" class="fixed inset-0 z-[11000] hidden items-center justify-center bg-black/95 backdrop-blur-xl cursor-zoom-out opacity-0 transition-opacity duration-300">
     <div class="relative max-w-[90vw] max-h-[90vh] -skew-x-1 border-2 border-cyan-400 p-2 bg-black shadow-[0_0_50px_rgba(0,240,255,0.3)]">
         <img id="lightbox-img" src="" class="w-full h-full object-contain" alt="Lightbox Preview" />
-        <div class="absolute -bottom-10 left-0 bg-cyan-400 text-black px-4 py-1 font-black italic text-sm -skew-x-12 uppercase">
-            Full_Visual_Data_Preview
-        </div>
+        <div class="absolute -bottom-10 left-0 bg-cyan-400 text-black px-4 py-1 font-black italic text-sm -skew-x-12 uppercase">Full_Visual_Data_Preview</div>
     </div>
 </div>
 
 <script>
+    // Logika script anda tetap sama karena ID modal-features dan modal-gallery tidak berubah
     const initModal = () => {
         const modal = document.getElementById('project-modal');
         const scrollContainer = modal?.querySelector('.custom-modal-scroll'); 
@@ -91,14 +88,9 @@
             const project = JSON.parse(projectData);
             if (scrollContainer) scrollContainer.scrollTop = 0; 
 
-            const titleEl = document.getElementById('modal-title');
-            if (titleEl) titleEl.innerText = project.title;
-
-            const categoryEl = document.getElementById('modal-category');
-            if (categoryEl) categoryEl.innerText = `// ${project.category}`;
-
-            const descEl = document.getElementById('modal-desc');
-            if (descEl) descEl.innerText = project.fullDescription || project.description;
+            document.getElementById('modal-title')!.innerText = project.title;
+            document.getElementById('modal-category')!.innerText = `// ${project.category}`;
+            document.getElementById('modal-desc')!.innerText = project.fullDescription || project.description;
 
             const featureList = document.getElementById('modal-features');
             if (featureList && project.features) {
@@ -120,20 +112,14 @@
                     <div class="relative group aspect-video cursor-zoom-in">
                         <div class="absolute -inset-1 bg-cyan-400 scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-500 z-0"></div>
                         <div class="relative h-full overflow-hidden border-2 border-white/10 -skew-x-1 bg-black z-10 transition-transform duration-500 group-hover:-translate-y-1">
-                            <img 
-                                src="${img}" 
-                                class="gallery-item w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 opacity-80 group-hover:opacity-100" 
-                                data-full="${img}"
-                                alt="Gallery Project"
-                            />
+                            <img src="${img}" class="gallery-item w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 opacity-80 group-hover:opacity-100" data-full="${img}" alt="Gallery Project" />
                         </div>
                     </div>
                 `).join('');
 
                 galleryDiv.querySelectorAll('.gallery-item').forEach(img => {
                     img.addEventListener('click', (e) => {
-                        const target = e.target as HTMLImageElement;
-                        const fullSrc = target.getAttribute('data-full');
+                        const fullSrc = (e.target as HTMLImageElement).getAttribute('data-full');
                         if (fullSrc && lightboxImg && lightbox) {
                             lightboxImg.src = fullSrc;
                             lightbox.classList.remove('hidden');
@@ -194,12 +180,11 @@
         to { transform: translateX(0); opacity: 1; }
     }
     
-    /* Scrollbar untuk container konten modal */
+    /* Scrollbar Styling */
     .custom-modal-scroll::-webkit-scrollbar { width: 10px; }
     .custom-modal-scroll::-webkit-scrollbar-track { background: transparent; }
     .custom-modal-scroll::-webkit-scrollbar-thumb { background: #00f0ff; border-radius: 4px; border: 2px solid #000a12; }
 
-    /* Scrollbar untuk galeri internal */
     .custom-inner-scroll::-webkit-scrollbar { width: 4px; }
     .custom-inner-scroll::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.05); }
     .custom-inner-scroll::-webkit-scrollbar-thumb { background: #00f0ff; }
