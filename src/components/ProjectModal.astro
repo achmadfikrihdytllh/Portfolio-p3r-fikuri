@@ -75,7 +75,6 @@
 </div>
 
 <script>
-    // Logika script anda tetap sama karena ID modal-features dan modal-gallery tidak berubah
     const initModal = () => {
         const modal = document.getElementById('project-modal');
         const scrollContainer = modal?.querySelector('.custom-modal-scroll'); 
@@ -179,8 +178,7 @@
         from { transform: translateX(-20px); opacity: 0; }
         to { transform: translateX(0); opacity: 1; }
     }
-    
-    /* Scrollbar Styling */
+
     .custom-modal-scroll::-webkit-scrollbar { width: 10px; }
     .custom-modal-scroll::-webkit-scrollbar-track { background: transparent; }
     .custom-modal-scroll::-webkit-scrollbar-thumb { background: #00f0ff; border-radius: 4px; border: 2px solid #000a12; }
