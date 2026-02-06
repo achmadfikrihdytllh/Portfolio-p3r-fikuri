@@ -81,10 +81,14 @@ import MainLayout from '../layouts/MainLayout.astro';
             </div>
         </div>
 
-        <div class="container mx-auto px-6 pb-20 text-center relative z-20">
-             <a href="/" class="inline-block bg-white text-black px-12 py-4 font-black uppercase -skew-x-12 hover:bg-cyan-500 hover:text-white transition-all">
+        <div class="container mx-auto px-6 pb-20 text-center relative z-50">
+            <a 
+                href="/" 
+                data-astro-reload 
+                class="inline-block bg-white text-black px-12 py-4 font-black uppercase -skew-x-12 hover:bg-cyan-500 hover:text-white transition-all shadow-[8px_8px_0_rgba(0,240,255,0.4)]"
+            >
                 <span class="skew-x-12 block">Return to Profile</span>
-             </a>
+            </a>
         </div>
     </main>
 </MainLayout>

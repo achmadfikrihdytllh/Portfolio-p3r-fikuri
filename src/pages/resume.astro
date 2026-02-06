@@ -9,7 +9,7 @@ import MainLayout from '../layouts/MainLayout.astro';
         <div class="absolute top-[-10%] right-[-10%] w-[500px] h-[500px] bg-blue-600/10 rounded-full blur-[120px]"></div>
 
         <nav class="relative z-20 p-6 flex justify-between items-center border-b border-blue-500/30 bg-black/40 backdrop-blur-md">
-            <a href="/" class="group flex items-center gap-3 text-blue-400 font-black italic uppercase tracking-widest text-sm -skew-x-12">
+            <a href="/" data-astro-reload class="group flex items-center gap-3 text-blue-400 font-black italic uppercase tracking-widest text-sm -skew-x-12">
                 <svg class="w-5 h-5 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
                 <span>Return to Lobby</span>
             </a>
@@ -86,16 +86,28 @@ import MainLayout from '../layouts/MainLayout.astro';
 
         audio.volume = 0.5;
 
-        const lobbyAudio = document.getElementById('bgm-audio') as HTMLAudioElement;
-        if (lobbyAudio) {
-            lobbyAudio.pause();
-            lobbyAudio.currentTime = 0;
-        }
+        const updateUI = (isPlaying: boolean) => {
+            if (isPlaying) {
+                playIcon?.classList.add('hidden');
+                pauseIcon?.classList.remove('hidden');
+            } else {
+                playIcon?.classList.remove('hidden');
+                pauseIcon?.classList.add('hidden');
+            }
+        };
 
+        // Autoplay Logic
         audio.play().then(() => {
             updateUI(true);
         }).catch(() => {
             updateUI(false);
+            // Backup: play on first interaction
+            const playOnInteraction = () => {
+                audio.play();
+                updateUI(true);
+                document.removeEventListener('click', playOnInteraction);
+            };
+            document.addEventListener('click', playOnInteraction, { once: true });
         });
 
         btn?.addEventListener('click', () => {
@@ -107,28 +119,15 @@ import MainLayout from '../layouts/MainLayout.astro';
                 updateUI(false);
             }
         });
-
-        function updateUI(isPlaying: boolean) {
-            if (isPlaying) {
-                playIcon?.classList.add('hidden');
-                pauseIcon?.classList.remove('hidden');
-            } else {
-                playIcon?.classList.remove('hidden');
-                pauseIcon?.classList.add('hidden');
-            }
-        }
     }
-
-    document.addEventListener('DOMContentLoaded', initVelvetPlayer);
-    document.addEventListener('astro:after-swap', initVelvetPlayer);
-
-    document.addEventListener('astro:before-swap', () => {
+    document.addEventListener('astro:page-load', initVelvetPlayer);
+    document.addEventListener('astro:before-preparation', () => {
         const audio = document.getElementById('velvet-bgm') as HTMLAudioElement;
         if (audio) {
             audio.pause();
             audio.currentTime = 0;
         }
-    });
+    }, { once: true });
 </script>
 
 <style>
