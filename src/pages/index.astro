@@ -57,12 +57,19 @@ import DialogueBox from '../components/DialogueBox.astro';
                     <div class="mt-6 inline-flex items-center bg-white text-black px-6 py-2 -skew-x-12 border-l-8 border-cyan-500 shadow-[0_0_15px_rgba(0,240,255,0.6)]">
                         <span class="text-xl md:text-2xl font-black uppercase tracking-widest skew-x-12 md:skew-x-0">Backend Developer</span>
                     </div>
-                    <p class="mt-6 text-gray-300 text-base md:text-lg max-w-lg leading-relaxed bg-black/60 p-4 backdrop-blur-sm border-l-2 border-cyan-500/50 shadow-lg">Specialized in <span class="text-cyan-300 font-bold">AdonisJS</span> & <span class="text-cyan-300 font-bold">Laravel</span>. Crafting robust APIs and scalable server-side architectures within the Sea of Souls.</p>
+                    <p class="mt-6 text-gray-300 text-base md:text-lg max-w-lg leading-relaxed bg-black/60 p-4 backdrop-blur-sm border-l-2 border-cyan-500/50 shadow-lg">
+                        Specialized in <span class="text-cyan-300 font-bold">AdonisJS</span> & <span class="text-cyan-300 font-bold">Laravel</span>. Crafting robust APIs and scalable server-side architectures within the Sea of Souls.
+                    </p>
                     
-                    <div class="mt-4 flex gap-4 justify-center md:justify-start">
-                        <a href="#projects" class="group relative px-8 py-3 bg-transparent border-2 border-cyan-400 text-cyan-400 font-bold uppercase tracking-widest overflow-hidden hover:text-black transition-colors">
+                    <div class="mt-8 flex flex-wrap gap-4 justify-center md:justify-start">
+                        <a href="#projects" class="group relative px-8 py-3 bg-transparent border-2 border-cyan-400 text-cyan-400 font-bold uppercase tracking-widest overflow-hidden hover:text-black transition-colors -skew-x-12">
                             <span class="absolute inset-0 w-full h-full bg-cyan-400 transform -translate-x-full skew-x-12 group-hover:translate-x-0 transition-transform duration-300 ease-out"></span>
-                            <span class="relative">View Projects</span>
+                            <span class="relative block skew-x-12">View Projects</span>
+                        </a>
+
+                        <a href="/timeline" class="group relative px-8 py-3 bg-white/10 backdrop-blur-sm border-2 border-white/50 text-white font-bold uppercase tracking-widest overflow-hidden hover:border-cyan-400 hover:text-cyan-400 transition-all -skew-x-12">
+                            <span class="absolute inset-0 w-full h-full bg-white transform translate-x-full -skew-x-12 group-hover:translate-x-0 transition-transform duration-300 ease-out"></span>
+                            <span class="relative block skew-x-12">View Timeline</span>
                         </a>
                     </div>
                 </div>
@@ -112,7 +119,5 @@ import DialogueBox from '../components/DialogueBox.astro';
                 orpheus.classList.add('opacity-100', 'translate-x-0', 'scale-100');
             }
         });
-        
     </script>
-    
 </MainLayout>

@@ -6,7 +6,17 @@ import Navbar from '../components/Navbar.astro';
 import { ViewTransitions } from 'astro:transitions';
 import ProjectModal from "../components/ProjectModal.astro";
 
-const { title, isVelvetRoom = false } = Astro.props;
+interface Props {
+  title: string;
+  isVelvetRoom?: boolean;
+  hideDefaultMusic?: boolean; 
+}
+
+const { 
+    title, 
+    isVelvetRoom = false, 
+    hideDefaultMusic = false 
+} = Astro.props;
 ---
 
 <!DOCTYPE html>
@@ -33,9 +43,11 @@ const { title, isVelvetRoom = false } = Astro.props;
             <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_20%,rgba(0,0,0,0.5)_100%)]"></div>
         </div>
 
+        { !isVelvetRoom && <Navbar /> }
+        
+        { !isVelvetRoom && !hideDefaultMusic && <MusicPlayer /> }
+
         { !isVelvetRoom && (
-            <Navbar />
-            <MusicPlayer />
             <div id="bubbles-wrapper" class="transition-opacity duration-[2000ms]">
                 <Bubbles />
             </div>
@@ -73,7 +85,8 @@ const { title, isVelvetRoom = false } = Astro.props;
                         if (darkHourBg) darkHourBg.style.opacity = "0";
                         if (baseVignette) baseVignette.style.opacity = "0";
                         
-                        const lobbyAudio = document.getElementById('bgm-audio') as HTMLAudioElement;
+                        // Gunakan optional chaining agar tidak error jika elemen tidak ada
+                        const lobbyAudio = document.getElementById('bgm-audio') as HTMLAudioElement | null;
                         if (lobbyAudio) {
                             lobbyAudio.pause();
                             lobbyAudio.currentTime = 0;
