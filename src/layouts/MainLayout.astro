@@ -1,10 +1,12 @@
 ---
+// src/layouts/MainLayout.astro
 import "../styles/global.css";
 import Bubbles from '../components/Bubbles.astro'; 
 import MusicPlayer from '../components/MusicPlayer.astro';
 import Navbar from '../components/Navbar.astro';
 import { ViewTransitions } from 'astro:transitions';
 import ProjectModal from "../components/ProjectModal.astro";
+import AigisChat from '../components/AigisChat.astro'; 
 
 interface Props {
   title: string;
@@ -55,6 +57,8 @@ const {
         
         <ProjectModal />
 
+        { !isVelvetRoom && <AigisChat /> }
+
         <div id="base-vignette" class="fixed inset-0 pointer-events-none z-[-1] bg-[radial-gradient(circle_at_center,transparent_20%,#000515_120%)] opacity-20"></div>
 
         <div id="top" class="relative z-10">
@@ -85,7 +89,6 @@ const {
                         if (darkHourBg) darkHourBg.style.opacity = "0";
                         if (baseVignette) baseVignette.style.opacity = "0";
                         
-                        // Gunakan optional chaining agar tidak error jika elemen tidak ada
                         const lobbyAudio = document.getElementById('bgm-audio') as HTMLAudioElement | null;
                         if (lobbyAudio) {
                             lobbyAudio.pause();

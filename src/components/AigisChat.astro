@@ -1,0 +1,109 @@
+---
+// src/components/AigisChat.astro
+---
+<button 
+  id="aigis-toggle" 
+  class="fixed bottom-8 left-8 w-16 h-16 rounded-full border-2 border-[#00F0FF] bg-[#000E44] shadow-[0_0_25px_rgba(0,240,255,0.6)] z-[100] overflow-hidden hover:scale-110 transition-all active:scale-90 group"
+>
+  <img src="/aigis-portrait.png" alt="Aigis" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all" />
+  <div class="absolute inset-0 bg-cyan-500/20 animate-ping opacity-20 pointer-events-none"></div>
+</button>
+
+<div 
+  id="aigis-window" 
+  class="fixed bottom-28 left-8 w-[320px] bg-[#000E44]/95 border-2 border-[#00F0FF] rounded-lg shadow-[0_0_50px_rgba(0,0,0,0.8)] font-mono z-[100] overflow-hidden translate-y-10 opacity-0 pointer-events-none transition-all duration-300 backdrop-blur-md"
+>
+  <div class="bg-[#00F0FF] text-[#000E44] px-3 py-1.5 text-[11px] font-black flex justify-between items-center tracking-tighter">
+    <span>> AIGIS_LOG_INTERFACE_v.1</span>
+    <button id="close-aigis" class="hover:bg-red-500 hover:text-white px-2 transition-colors">X</button>
+  </div>
+
+  <div id="chat-window" class="h-80 overflow-y-auto p-4 text-[12px] space-y-4 scroll-smooth scrollbar-thin scrollbar-thumb-cyan-500 bg-[url('/grid-pattern.png')] bg-repeat">
+    <p class="text-[#00F0FF] leading-relaxed"><strong>Aigis:</strong> Initializing Protocol... Sistem siap menerima instruksi, Guest. Apa perintah Anda?</p>
+  </div>
+
+  <div id="aigis-typing" class="px-4 pb-2 text-[10px] text-cyan-400 italic hidden">Analyzing combat data...</div>
+
+  <div class="p-3 border-t border-[#00F0FF]/30 bg-black/60">
+    <div class="flex gap-2">
+      <input 
+        type="text" 
+        id="user-msg" 
+        placeholder="Enter command..." 
+        class="w-full bg-transparent border-none text-[12px] text-[#00F0FF] focus:ring-0 placeholder:text-cyan-900 font-bold"
+      />
+      <button id="send-btn" class="text-[#00F0FF] hover:text-white hover:scale-125 transition-all">▶</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  let history: any[] = [];
+  const toggle = document.getElementById('aigis-toggle');
+  const windowObj = document.getElementById('aigis-window');
+  const closeBtn = document.getElementById('close-aigis');
+  const display = document.getElementById('chat-window');
+  const input = document.getElementById('user-msg') as HTMLInputElement;
+  const btn = document.getElementById('send-btn');
+  const typing = document.getElementById('aigis-typing');
+
+  // Toggle Window
+  toggle?.addEventListener('click', () => {
+    windowObj?.classList.toggle('opacity-0');
+    windowObj?.classList.toggle('translate-y-10');
+    windowObj?.classList.toggle('pointer-events-none');
+    if (!windowObj?.classList.contains('opacity-0')) input.focus();
+  });
+
+  closeBtn?.addEventListener('click', () => {
+    windowObj?.classList.add('opacity-0', 'translate-y-10', 'pointer-events-none');
+  });
+
+  async function ask() {
+    const text = input.value.trim();
+    if (!text) return;
+
+    // User Bubble
+    display!.innerHTML += `
+      <div class="text-right">
+        <p class="text-white/80 bg-white/10 p-2 rounded-l-lg rounded-br-none inline-block border-r-2 border-white/50">
+          ${text}
+        </p>
+      </div>`;
+    
+    input.value = "";
+    display!.scrollTop = display!.scrollHeight;
+    typing?.classList.remove('hidden');
+
+    try {
+      const res = await fetch('/api/aigis', {
+        method: 'POST',
+        body: JSON.stringify({ message: text, history }),
+        headers: { 'Content-Type': 'application/json' }
+      });
+
+      const data = await res.json();
+      typing?.classList.add('hidden');
+
+      if (data.text) {
+        history.push({ role: "user", parts: [{ text }] });
+        history.push({ role: "model", parts: [{ text: data.text }] });
+        
+        display!.innerHTML += `
+          <div class="flex flex-col">
+            <span class="text-[10px] text-cyan-400 font-bold mb-1">AIGIS_RESPONSE:</span>
+            <p class="text-[#00F0FF] bg-cyan-950/30 p-2 rounded-r-lg border-l-2 border-[#00F0FF]">
+              ${data.text}
+            </p>
+          </div>`;
+      }
+    } catch {
+      typing?.classList.add('hidden');
+      display!.innerHTML += `<p class="text-red-500 font-bold">[!] CONNECTION_ERROR</p>`;
+    }
+    display!.scrollTop = display!.scrollHeight;
+  }
+
+  btn?.addEventListener('click', ask);
+  input?.addEventListener('keypress', (e) => e.key === 'Enter' && ask());
+</script>
