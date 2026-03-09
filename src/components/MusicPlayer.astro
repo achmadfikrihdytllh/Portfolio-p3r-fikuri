@@ -65,43 +65,20 @@
 
     function initPlayer() {
         const audio = document.getElementById('bgm-audio') as HTMLAudioElement;
-        const body = document.body;
-        if (!audio || body.getAttribute('data-page-type') === 'velvet') return;
-
         const btn = document.getElementById('toggle-bgm');
-        const playerContainer = document.getElementById('music-player-container');
         const iconPlay = document.getElementById('icon-play');
         const iconPause = document.getElementById('icon-pause');
         const visualizer = document.getElementById('visualizer');
         const trackTitle = document.getElementById('bgm-track-title');
         const statusText = document.getElementById('bgm-status-text');
+        const playerContainer = document.getElementById('music-player-container');
 
-        const updateTrack = () => {
-            const theme = document.documentElement.getAttribute('data-theme') || 'p3';
-            const hour = new Date().getHours();
-            const isDarkHour = hour >= 0 && hour < 5 && theme === 'p3';
-            
-            let selected;
-            if (theme === 'p5') {
-                selected = tracks.p5;
-            } else if (isDarkHour) {
-                selected = tracks.darkHour;
-            } else {
-                selected = tracks.p3;
-            }
+        if (!audio || document.body.getAttribute('data-page-type') === 'velvet') return;
 
-            // Ganti source hanya jika berbeda
-            if (!audio.src.includes(encodeURIComponent(selected.src))) {
-                const wasPlaying = !audio.paused;
-                audio.src = selected.src;
-                if (trackTitle) trackTitle.innerText = selected.title;
-                if (statusText) statusText.innerText = selected.status;
-                if (wasPlaying) audio.play().catch(() => {});
-            }
-        };
-
-        const updateUI = (playing: boolean) => {
-            if (playing) {
+        // --- 1. LOGIKA UPDATE UI (SINKRONISASI TOTAL) ---
+        const syncUI = () => {
+            const isPlaying = !audio.paused;
+            if (isPlaying) {
                 iconPlay?.classList.add('hidden');
                 iconPause?.classList.remove('hidden');
                 visualizer?.classList.remove('paused');
@@ -112,49 +89,82 @@
             }
         };
 
-        // Jalankan update track saat init
+        // Dengerin langsung dari audionya
+        audio.onplay = () => {
+            syncUI();
+            localStorage.setItem(STORAGE_KEY, 'true');
+        };
+        audio.onpause = () => {
+            syncUI();
+            localStorage.setItem(STORAGE_KEY, 'false');
+        };
+
+        // --- 2. LOGIKA TRACK & THEME ---
+        const updateTrack = () => {
+            const theme = document.documentElement.getAttribute('data-theme') || 'p3';
+            const hour = new Date().getHours();
+            const isDarkHour = hour >= 0 && hour < 5 && theme === 'p3';
+            
+            let selected = theme === 'p5' ? tracks.p5 : (isDarkHour ? tracks.darkHour : tracks.p3);
+
+            if (!audio.src.includes(encodeURIComponent(selected.src))) {
+                const wasPlaying = !audio.paused || localStorage.getItem(STORAGE_KEY) === 'true';
+                audio.src = selected.src;
+                if (trackTitle) trackTitle.innerText = selected.title;
+                if (statusText) statusText.innerText = selected.status;
+                
+                // Jika sebelumnya sedang main, paksa main lagi setelah ganti source
+                if (wasPlaying && !document.getElementById('summon-overlay')) {
+                    audio.play().catch(() => {});
+                }
+            }
+        };
+
+        // --- 3. INITIAL LOAD ---
         updateTrack();
-
-        let isPlaying = localStorage.getItem(STORAGE_KEY) === 'true';
-        updateUI(isPlaying);
-
-        if (isPlaying && !document.getElementById('summon-overlay')) {
-            audio.play().catch(() => {});
-            playerContainer?.classList.remove('translate-y-32', 'opacity-0');
+        
+        // Cek apakah di storage "true" dan bukan di screen awal
+        if (localStorage.getItem(STORAGE_KEY) === 'true' && !document.getElementById('summon-overlay')) {
+            audio.play()
+                .then(() => {
+                    playerContainer?.classList.remove('translate-y-32', 'opacity-0');
+                    syncUI();
+                })
+                .catch(() => {
+                    // Jika autoplay diblokir browser, paksa UI ke mode paused
+                    syncUI();
+                });
+        } else {
+            syncUI(); // Pastikan ikon awal benar (Play)
         }
 
+        // --- 4. INTERAKSI TOMBOL ---
         if (btn) {
             btn.onclick = () => {
                 if (audio.paused) {
-                    audio.play().then(() => {
-                        localStorage.setItem(STORAGE_KEY, 'true');
-                        updateUI(true);
-                    });
+                    audio.play().catch(e => console.error("Playback blocked"));
                 } else {
                     audio.pause();
-                    localStorage.setItem(STORAGE_KEY, 'false');
-                    updateUI(false);
                 }
             };
         }
 
-        // Listener untuk World Shift (Ganti lagu real-time)
-        window.addEventListener('worldShift', () => {
-            updateTrack();
-        });
+        window.addEventListener('worldShift', updateTrack);
     }
 
+    // Support untuk Astro View Transitions
     document.addEventListener('DOMContentLoaded', initPlayer);
     document.addEventListener('astro:after-swap', initPlayer);
 
+    // Event saat tombol "Summon" ditekan di Intro
     document.addEventListener('personaSummoned', () => {
         const audio = document.getElementById('bgm-audio') as HTMLAudioElement;
         const playerContainer = document.getElementById('music-player-container');
+        
         if (audio) {
-            audio.play().then(() => {
-                localStorage.setItem(STORAGE_KEY, 'true');
-            }).catch(() => {});
+            audio.play().catch(() => {});
         }
+        
         if (playerContainer) {
             setTimeout(() => {
                 playerContainer.classList.remove('translate-y-32', 'opacity-0');
