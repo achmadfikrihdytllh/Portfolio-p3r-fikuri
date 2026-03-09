@@ -14,6 +14,8 @@ interface Props {
   hideDefaultMusic?: boolean; 
 }
 
+const OWNER_BASE_THEME = 'p3'; 
+
 const { 
     title, 
     isVelvetRoom = false, 
@@ -33,20 +35,41 @@ const {
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Exo+2:ital,wght@0,400;0,600;0,700;0,900;1,700&display=swap" rel="stylesheet">
+
+        <script is:inline define:vars={{ OWNER_BASE_THEME }}>
+            const initTheme = () => {
+                const saved = localStorage.getItem('persona-theme');
+                const theme = saved || OWNER_BASE_THEME;
+                document.documentElement.setAttribute('data-theme', theme);
+            };
+            initTheme();
+            document.addEventListener('astro:after-swap', initTheme);
+        </script>
     </head>
     
     <body 
         data-page-type={isVelvetRoom ? "velvet" : "normal"}
-        class="bg-[#002060] text-white font-['Exo_2'] overflow-x-hidden relative min-h-screen transition-all duration-[3000ms]"
+        class="bg-p-bg text-white font-['Exo_2'] overflow-x-hidden relative min-h-screen transition-all duration-[1000ms]"
     >
-        <div id="normal-bg" class="fixed inset-0 z-[-10] transition-opacity duration-[3000ms] bg-[radial-gradient(circle_at_80%_0%,_#85F2FF_0%,_#0090F0_45%,_#001540_100%)]"></div>
+        <div 
+            id="normal-bg" 
+            class="fixed inset-0 z-[-10] transition-opacity duration-[2000ms] bg-cover bg-center bg-no-repeat"
+            style="background: radial-gradient(circle at 80% 0%, var(--color-primary) 0%, var(--color-accent) 45%, var(--color-bg) 100%); opacity: 0.6;"
+        ></div>
         
         <div id="dark-hour-bg" class="fixed inset-0 z-[-9] opacity-0 transition-opacity duration-[3000ms] bg-cover bg-center bg-no-repeat pointer-events-none" style="background-image: url('/dark-hour.png');">
-            <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_20%,rgba(0,0,0,0.5)_100%)]"></div>
+            <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_20%,rgba(0,0,0,0.8)_100%)]"></div>
+        </div>
+
+        <div 
+            id="p5-bg" 
+            class="fixed inset-0 z-[-8] opacity-0 transition-opacity duration-[2000ms] bg-cover bg-center bg-no-repeat pointer-events-none" 
+            style="background-image: url('/shibuya.jpg');"
+        >
+            <div class="absolute inset-0 bg-black/40"></div>
         </div>
 
         { !isVelvetRoom && <Navbar /> }
-        
         { !isVelvetRoom && !hideDefaultMusic && <MusicPlayer /> }
 
         { !isVelvetRoom && (
@@ -56,55 +79,63 @@ const {
         )}
         
         <ProjectModal />
-
         { !isVelvetRoom && <AigisChat /> }
 
-        <div id="base-vignette" class="fixed inset-0 pointer-events-none z-[-1] bg-[radial-gradient(circle_at_center,transparent_20%,#000515_120%)] opacity-20"></div>
+        <div id="base-vignette" class="fixed inset-0 pointer-events-none z-[-1] transition-all duration-1000" style="background: radial-gradient(circle at center, transparent 20%, var(--color-bg) 120%); opacity: 0.6;"></div>
 
         <div id="top" class="relative z-10">
             <slot />
         </div>
 
         <script>
-            const updateTheme = () => {
+            const updateWorldVisuals = () => {
                 const hour = new Date().getHours();
                 const body = document.body;
                 const isVelvet = body.getAttribute('data-page-type') === 'velvet';
-                const isDarkHour = hour >= 0 && hour < 5 && !isVelvet;
+                const currentTheme = document.documentElement.getAttribute('data-theme');
 
                 const normalBg = document.getElementById('normal-bg');
                 const darkHourBg = document.getElementById('dark-hour-bg');
+                const p5Bg = document.getElementById('p5-bg'); // Layer Baru
                 const baseVignette = document.getElementById('base-vignette');
                 const bubbles = document.getElementById('bubbles-wrapper');
 
-                if (isDarkHour) {
-                    body.classList.add('dark-hour-active');
-                    if (normalBg) normalBg.style.opacity = "0";
-                    if (darkHourBg) darkHourBg.style.opacity = "1";
-                    if (bubbles) bubbles.style.opacity = "0";
+                // Logika Reset Semua
+                if (normalBg) normalBg.style.opacity = "0";
+                if (darkHourBg) darkHourBg.style.opacity = "0";
+                if (p5Bg) p5Bg.style.opacity = "0";
+                if (bubbles) bubbles.style.opacity = "0";
+
+                if (isVelvet) {
+                    if (baseVignette) baseVignette.style.opacity = "0";
+                    return;
+                }
+
+                // EKSEKUSI TEMA
+                if (currentTheme === 'p5') {
+                    // MODE PERSONA 5
+                    if (p5Bg) p5Bg.style.opacity = "1";
+                    if (baseVignette) baseVignette.style.opacity = "0.7";
                 } else {
-                    body.classList.remove('dark-hour-active');
-                    if (isVelvet) {
-                        if (normalBg) normalBg.style.opacity = "0";
-                        if (darkHourBg) darkHourBg.style.opacity = "0";
-                        if (baseVignette) baseVignette.style.opacity = "0";
-                        
-                        const lobbyAudio = document.getElementById('bgm-audio') as HTMLAudioElement | null;
-                        if (lobbyAudio) {
-                            lobbyAudio.pause();
-                            lobbyAudio.currentTime = 0;
-                        }
+                    // MODE PERSONA 3
+                    const isDarkHour = hour >= 0 && hour < 5;
+                    
+                    if (isDarkHour) {
+                        body.classList.add('dark-hour-active');
+                        if (darkHourBg) darkHourBg.style.opacity = "1";
                     } else {
-                        if (normalBg) normalBg.style.opacity = "1";
-                        if (darkHourBg) darkHourBg.style.opacity = "0";
+                        body.classList.remove('dark-hour-active');
+                        if (normalBg) normalBg.style.opacity = "0.6";
                         if (bubbles) bubbles.style.opacity = "1";
-                        if (baseVignette) baseVignette.style.opacity = "0.2";
                     }
+                    if (baseVignette) baseVignette.style.opacity = "0.5";
                 }
             };
 
-            document.addEventListener('DOMContentLoaded', updateTheme);
-            document.addEventListener('astro:after-swap', updateTheme);
+            updateWorldVisuals();
+            document.addEventListener('DOMContentLoaded', updateWorldVisuals);
+            document.addEventListener('astro:after-swap', updateWorldVisuals);
+            window.addEventListener('worldShift', updateWorldVisuals);
         </script>
     </body>
 </html>

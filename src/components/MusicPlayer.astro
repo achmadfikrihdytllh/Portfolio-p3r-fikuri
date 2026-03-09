@@ -1,23 +1,26 @@
 <div id="music-player-container" class="fixed bottom-8 right-8 z-[90] translate-y-32 opacity-0 transition-all duration-1000 ease-out">
     <div class="relative group">
-        <div class="absolute inset-0 bg-[#00f0ff] transform translate-x-1 translate-y-1 -skew-x-12 opacity-50 blur-sm transition-all group-hover:opacity-80"></div>
-        <div class="relative flex items-center gap-4 bg-gradient-to-r from-[#000a12] to-[#001e3c] border-2 border-[#2DE2E6] px-6 py-3 -skew-x-12 shadow-[0_0_15px_rgba(0,240,255,0.2)] overflow-hidden">
-            <div class="absolute inset-0 opacity-20 pointer-events-none bg-[linear-gradient(45deg,transparent_25%,rgba(45,226,230,0.1)_50%,transparent_75%,transparent_100%)] bg-[length:10px_10px]"></div>
-            <button id="toggle-bgm" class="skew-x-12 flex items-center justify-center w-10 h-10 rounded-full bg-[#2DE2E6] text-[#000a12] hover:bg-white hover:scale-110 transition-all duration-300 shadow-lg cursor-pointer z-10">
+        <div class="absolute inset-0 bg-primary transform translate-x-1 translate-y-1 -skew-x-12 opacity-40 blur-sm transition-all group-hover:opacity-70"></div>
+        
+        <div class="relative flex items-center gap-4 bg-gradient-to-r from-black via-p-bg to-black border-2 border-primary px-6 py-3 -skew-x-12 shadow-[0_0_15px_var(--persona-shadow)] overflow-hidden">
+            <div class="absolute inset-0 opacity-10 pointer-events-none bg-[linear-gradient(45deg,transparent_25%,var(--color-primary)_50%,transparent_75%,transparent_100%)] bg-[length:10px_10px]"></div>
+            
+            <button id="toggle-bgm" class="skew-x-12 flex items-center justify-center w-10 h-10 rounded-full bg-primary text-black hover:bg-white hover:scale-110 transition-all duration-300 shadow-lg cursor-pointer z-10">
                 <svg id="icon-play" class="w-4 h-4 hidden" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
                 <svg id="icon-pause" class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
             </button>
-            <div class="flex flex-col skew-x-12 min-w-[120px]">
+
+            <div class="flex flex-col skew-x-12 min-w-[140px]">
                 <div class="flex items-center justify-between mb-1">
-                    <span id="bgm-status-text" class="text-[10px] font-bold text-[#2DE2E6] tracking-widest font-mono">BGM ACTIVE</span>
+                    <span id="bgm-status-text" class="text-[10px] font-black text-primary tracking-widest font-mono italic">BGM ACTIVE</span>
                     <div id="visualizer" class="flex items-end gap-[2px] h-3">
                         <div class="bar w-1 bg-white" style="--delay: 0s"></div>
-                        <div class="bar w-1 bg-[#2DE2E6]" style="--delay: 0.1s"></div>
+                        <div class="bar w-1 bg-primary" style="--delay: 0.1s"></div>
                         <div class="bar w-1 bg-white" style="--delay: 0.2s"></div>
-                        <div class="bar w-1 bg-[#2DE2E6]" style="--delay: 0.3s"></div>
+                        <div class="bar w-1 bg-primary" style="--delay: 0.3s"></div>
                     </div>
                 </div>
-                <h3 id="bgm-track-title" class="text-white font-bold text-sm tracking-wide leading-none uppercase truncate max-w-[150px]">Color Your Night</h3>
+                <h3 id="bgm-track-title" class="text-white font-black text-sm tracking-wide leading-none uppercase truncate max-w-[150px]">Initializing...</h3>
             </div>
         </div>
     </div>
@@ -33,6 +36,7 @@
         height: 100%;
         animation: sound-bars 0.8s infinite ease-in-out;
         animation-delay: var(--delay);
+        transition: background-color 0.5s;
     }
     .paused .bar {
         animation-play-state: paused;
@@ -53,6 +57,12 @@
 <script>
     const STORAGE_KEY = 'p3r_bgm_playing';
 
+    const tracks = {
+        p3: { src: '/Color Your Night.mp3', title: 'Color Your Night', status: 'S.E.E.S' },
+        darkHour: { src: '/dark-hour.mp3', title: 'Deep Breath Deep Breath', status: 'DARK HOUR ACTIVE' },
+        p5: { src: '/Take-Over.mp3', title: 'Take Over', status: 'PHANTOM THIEVES' }
+    };
+
     function initPlayer() {
         const audio = document.getElementById('bgm-audio') as HTMLAudioElement;
         const body = document.body;
@@ -66,15 +76,29 @@
         const trackTitle = document.getElementById('bgm-track-title');
         const statusText = document.getElementById('bgm-status-text');
 
-        const hour = new Date().getHours();
-        const isDarkHour = hour >= 0 && hour < 5;
-        const targetSrc = isDarkHour ? '/dark-hour.mp3' : '/Color Your Night.mp3';
-        
-        if (!audio.src.includes(encodeURIComponent(targetSrc))) {
-            audio.src = targetSrc;
-            if (trackTitle) trackTitle.innerText = isDarkHour ? 'DARK HOUR' : 'Color Your Night';
-            if (statusText) statusText.innerText = isDarkHour ? 'DARK HOUR ACTIVE' : 'BGM ACTIVE';
-        }
+        const updateTrack = () => {
+            const theme = document.documentElement.getAttribute('data-theme') || 'p3';
+            const hour = new Date().getHours();
+            const isDarkHour = hour >= 0 && hour < 5 && theme === 'p3';
+            
+            let selected;
+            if (theme === 'p5') {
+                selected = tracks.p5;
+            } else if (isDarkHour) {
+                selected = tracks.darkHour;
+            } else {
+                selected = tracks.p3;
+            }
+
+            // Ganti source hanya jika berbeda
+            if (!audio.src.includes(encodeURIComponent(selected.src))) {
+                const wasPlaying = !audio.paused;
+                audio.src = selected.src;
+                if (trackTitle) trackTitle.innerText = selected.title;
+                if (statusText) statusText.innerText = selected.status;
+                if (wasPlaying) audio.play().catch(() => {});
+            }
+        };
 
         const updateUI = (playing: boolean) => {
             if (playing) {
@@ -87,6 +111,9 @@
                 visualizer?.classList.add('paused');
             }
         };
+
+        // Jalankan update track saat init
+        updateTrack();
 
         let isPlaying = localStorage.getItem(STORAGE_KEY) === 'true';
         updateUI(isPlaying);
@@ -110,31 +137,24 @@
                 }
             };
         }
+
+        // Listener untuk World Shift (Ganti lagu real-time)
+        window.addEventListener('worldShift', () => {
+            updateTrack();
+        });
     }
 
     document.addEventListener('DOMContentLoaded', initPlayer);
     document.addEventListener('astro:after-swap', initPlayer);
 
-    document.addEventListener('astro:before-swap', () => {
-        const audio = document.getElementById('bgm-audio') as HTMLAudioElement;
-        if (audio) {
-            audio.pause();
-            audio.currentTime = 0;
-        }
-    });
-
     document.addEventListener('personaSummoned', () => {
         const audio = document.getElementById('bgm-audio') as HTMLAudioElement;
         const playerContainer = document.getElementById('music-player-container');
-        
-        if (document.body.getAttribute('data-page-type') === 'velvet') return;
-
         if (audio) {
             audio.play().then(() => {
                 localStorage.setItem(STORAGE_KEY, 'true');
             }).catch(() => {});
         }
-        
         if (playerContainer) {
             setTimeout(() => {
                 playerContainer.classList.remove('translate-y-32', 'opacity-0');

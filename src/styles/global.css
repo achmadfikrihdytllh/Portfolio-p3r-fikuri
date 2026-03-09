@@ -2,9 +2,30 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Default Background Dark Blue Persona */
+/* --- THE WORLD DNA --- */
+
+/* 🔵 DUNIA PERSONA 3 (Default Kamu Sekarang) */
+:root, [data-theme="p3"] {
+  --color-bg: #0e1623;           /* Biru Gelap P3 */
+  --color-primary: #00f0ff;       /* Cyan khas S.E.E.S */
+  --color-accent: #00f0ff;        /* Biru Navy */
+  --color-text: #ffffff;
+  --font-skew: -12deg;            /* Kemiringan rapi P3 */
+  --persona-shadow: rgba(0, 240, 255, 0.4);
+}
+
+[data-theme="p5"] {
+  --color-bg: #000000;
+  --color-primary: #ff0000;    /* Merah murni yang lebih terang */
+  --color-accent: #ff3333;     /* Merah transparan untuk glow */
+  --color-text: #ffffff;
+  --font-skew: -6deg;
+  --persona-shadow: rgba(255, 0, 0, 0.7);
+}
+
+/* --- PENERAPAN GLOBAL --- */
 body {
-  background-color: #0e1623; 
-  color: white;
-  margin: 0;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1); /* Transisi halus saat pindah dunia */
 }

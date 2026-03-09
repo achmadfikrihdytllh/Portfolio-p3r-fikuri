@@ -18,22 +18,22 @@ import AigisChat from '../components/AigisChat.astro';
     <main class="min-h-screen flex items-center justify-center p-4 relative z-20 overflow-hidden">
         
         <div class="relative w-full max-w-6xl">
-            <div class="absolute top-0 right-0 w-4/5 h-full bg-cyan-950/30 -skew-x-12 border-r-4 border-cyan-500/50 z-0"></div>
+            <div id="hero-bg-overlay" class="absolute top-0 right-0 w-4/5 h-full bg-accent/20 -skew-x-12 border-r-4 border-primary/50 z-0 transition-all duration-700"></div>
 
             <div class="flex flex-col md:flex-row items-center gap-8 md:gap-16 relative z-10 px-4">
                 
                 <div class="w-56 h-56 md:w-80 md:h-80 shrink-0 relative group z-50">
-                    <div class="absolute inset-0 border-2 border-cyan-400 -skew-x-6 transform group-hover:skew-x-0 transition-transform duration-500"></div>
-                    <div class="absolute inset-0 bg-blue-900/80 -skew-x-6 translate-x-3 translate-y-3 -z-10"></div>
+                    <div id="profile-border" class="absolute inset-0 border-2 border-primary -skew-x-6 transform group-hover:skew-x-0 transition-all duration-500 shadow-[0_0_25px_var(--persona-shadow)]"></div>
+                    <div class="absolute inset-0 bg-accent/80 -skew-x-6 translate-x-3 translate-y-3 -z-10 transition-colors"></div>
                     
                     <img 
                         id="profile-image"
                         src="/profile.png" 
                         alt="Profile" 
-                        class="w-full h-full object-cover -skew-x-6 grayscale transition-all duration-1000 shadow-[0_0_20px_rgba(0,240,255,0.4)]" 
+                        class="w-full h-full object-cover -skew-x-6 grayscale transition-all duration-1000 shadow-[0_0_15px_rgba(0,0,0,0.5)]" 
                     />
 
-                    <div id="evoker-gun" class="absolute -left-40 top-10 md:-left-64 md:top-12 z-[60] w-52 md:w-[380px] transform -rotate-[15deg] transition-all duration-200 origin-bottom-right">
+                    <div id="evoker-gun" class="absolute -left-40 top-10 md:-left-64 md:top-12 z-[60] w-52 md:w-[380px] transform -rotate-[15deg] transition-all duration-500 origin-bottom-right">
                         <img src="/evoker.png" alt="Evoker" class="w-full h-full object-contain drop-shadow-[0_0_15px_rgba(255,255,255,0.4)]" />
                     </div>
                 </div>
@@ -41,24 +41,26 @@ import AigisChat from '../components/AigisChat.astro';
                 <div class="flex-1 text-center md:text-left relative z-20">
                     <h2 class="text-lg md:text-2xl font-bold uppercase tracking-widest text-gray-300 -skew-x-12 mb-[-5px]">Fikuri Olenyeva</h2>
                     <h1 class="text-5xl md:text-7xl font-black italic uppercase tracking-tighter -skew-x-12 text-white drop-shadow-[3px_3px_0_#000]">
-                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-cyan-200 to-white">Achmad Fikri Hidayatullah</span>
+                        <span id="hero-name" class="text-transparent bg-clip-text bg-gradient-to-r from-primary via-white to-primary transition-all duration-700">
+                            Achmad Fikri Hidayatullah
+                        </span>
                     </h1>
                     
-                    <div class="mt-6 inline-flex items-center bg-white text-black px-6 py-2 -skew-x-12 border-l-8 border-cyan-500 shadow-[0_0_15px_rgba(0,240,255,0.6)]">
+                    <div id="role-tag" class="mt-6 inline-flex items-center bg-white text-black px-6 py-2 -skew-x-12 border-l-8 border-primary shadow-[0_0_20px_var(--persona-shadow)] transition-all">
                         <span class="text-xl md:text-2xl font-black uppercase tracking-widest skew-x-12 md:skew-x-0">Backend Developer</span>
                     </div>
 
-                    <p class="mt-6 text-gray-300 text-base md:text-lg max-w-lg leading-relaxed bg-black/60 p-4 backdrop-blur-sm border-l-2 border-cyan-500/50 shadow-lg font-['Exo_2']">
-                        Specialized in <span class="text-cyan-300 font-bold">AdonisJS</span> & <span class="text-cyan-300 font-bold">Laravel</span>. Crafting robust APIs and scalable server-side architectures.
+                    <p id="hero-desc" class="mt-6 text-gray-300 text-base md:text-lg max-w-lg leading-relaxed bg-black/60 p-4 backdrop-blur-sm border-l-2 border-primary/50 shadow-lg font-['Exo_2'] transition-all">
+                        Specialized in <span class="text-primary font-bold">AdonisJS</span> & <span class="text-primary font-bold">Laravel</span>. Crafting robust APIs and scalable server-side architectures.
                     </p>
                     
                     <div class="mt-8 flex flex-wrap gap-4 justify-center md:justify-start">
-                        <a href="#projects" class="group relative px-8 py-3 bg-transparent border-2 border-cyan-400 text-cyan-400 font-bold uppercase tracking-widest overflow-hidden hover:text-black transition-colors -skew-x-12">
-                            <span class="absolute inset-0 w-full h-full bg-cyan-400 transform -translate-x-full skew-x-12 group-hover:translate-x-0 transition-transform duration-300 ease-out"></span>
+                        <a href="#projects" class="group relative px-8 py-3 bg-transparent border-2 border-primary text-primary font-bold uppercase tracking-widest overflow-hidden hover:text-black transition-colors -skew-x-12">
+                            <span class="absolute inset-0 w-full h-full bg-primary transform -translate-x-full skew-x-12 group-hover:translate-x-0 transition-transform duration-300 ease-out"></span>
                             <span class="relative block skew-x-12">View Projects</span>
                         </a>
 
-                        <a href="/timeline" class="group relative px-8 py-3 bg-white/10 backdrop-blur-sm border-2 border-white/50 text-white font-bold uppercase tracking-widest overflow-hidden hover:border-cyan-400 hover:text-cyan-400 transition-all -skew-x-12">
+                        <a href="/timeline" class="group relative px-8 py-3 bg-white/10 backdrop-blur-sm border-2 border-white/50 text-white font-bold uppercase tracking-widest overflow-hidden hover:border-primary hover:text-primary transition-all -skew-x-12">
                             <span class="absolute inset-0 w-full h-full bg-white transform translate-x-full -skew-x-12 group-hover:translate-x-0 transition-transform duration-300 ease-out"></span>
                             <span class="relative block skew-x-12">View Timeline</span>
                         </a>
@@ -66,45 +68,92 @@ import AigisChat from '../components/AigisChat.astro';
                 </div>
             </div>
 
-            <div id="orpheus-container" class="absolute right-0 md:-right-80 top-[40%] -translate-y-1/2 w-[400px] md:w-[850px] pointer-events-none z-0 opacity-0 translate-x-20 scale-95 transition-all duration-[2000ms] ease-out hidden lg:block">
-                <img src="/thanatos.png" alt="Persona" class="w-full h-full object-contain filter drop-shadow-[0_0_30px_rgba(0,240,255,0.2)] mix-blend-normal opacity-100" />
+            <div id="persona-container" class="absolute right-0 md:-right-80 top-[40%] -translate-y-1/2 w-[400px] md:w-[850px] pointer-events-none z-0 opacity-0 translate-x-20 scale-95 transition-all duration-[2000ms] ease-out hidden lg:block">
+                <img id="persona-img" src="/thanatos.png" alt="Persona" class="w-full h-full object-contain filter drop-shadow-[0_0_40px_var(--persona-shadow)] transition-all duration-700" />
             </div>
         </div>
     </main>
 
-    <div class="relative z-10 bg-black/40 backdrop-blur-sm border-y border-cyan-900/50"><Skills /></div>
-    <div class="relative z-10 border-b border-blue-900/30 shadow-[0_0_30px_rgba(0,100,255,0.1)]"><Resume /></div>
+    <div class="relative z-10 bg-black/40 backdrop-blur-sm border-y border-primary/20"><Skills /></div>
+    <div class="relative z-10 border-b border-accent/30 shadow-[0_0_30px_var(--persona-shadow)]"><Resume /></div>
     <div class="relative z-10"><Projects /></div>
     <div class="relative z-10 border-t border-gray-800"><Contact /></div>
 
     <footer class="py-10 text-center text-gray-500 font-mono text-sm relative z-10 border-t border-gray-800 bg-black">
-        <p> © 2026 Fikuri Olenyeva || S.E.E.S PROTOCOL </p>
+        <p id="footer-text"> © 2026 Fikuri Olenyeva || S.E.E.S PROTOCOL </p>
     </footer>
 
     <AigisChat />
 
     <script>
+        // LOGIKA WORLD SHIFT: Background & Aset
+        const updateWorldAssets = (theme: string) => {
+            const personaImg = document.getElementById('persona-img') as HTMLImageElement;
+            const evoker = document.getElementById('evoker-gun');
+            const footerText = document.getElementById('footer-text');
+            const calendar = document.getElementById('p3-calendar-root');
+            const normalBg = document.getElementById('normal-bg'); // Mengambil element dari Layout
+
+            if (theme === 'p5') {
+                // Protokol Persona 5
+                if (personaImg) personaImg.src = "/Satanael.png";
+                if (evoker) evoker.style.display = "none";
+                if (calendar) calendar.style.display = "none";
+                if (footerText) footerText.innerText = "© 2026 Fikuri Olenyeva || PHANTOM_THIEVES PROTOCOL";
+                
+                // MENGAKTIFKAN SHIBUYA
+                if (normalBg) {
+                    normalBg.style.backgroundImage = "url('/shibuya.png')";
+                    normalBg.style.backgroundSize = "cover";
+                    normalBg.style.backgroundPosition = "center";
+                    normalBg.style.opacity = "0.7"; // Biar kontrasnya enak dilihat
+                }
+            } else {
+                // Protokol Persona 3
+                if (personaImg) personaImg.src = "/thanatos.png";
+                if (evoker) evoker.style.display = "none";
+                if (calendar) calendar.style.display = "block";
+                if (footerText) footerText.innerText = "© 2026 Fikuri Olenyeva || S.E.E.S PROTOCOL";
+                
+                // KEMBALI KE GRADASI BIRU
+                if (normalBg) {
+                    normalBg.style.backgroundImage = "block";
+                    normalBg.style.opacity = "0.4";
+                }
+            }
+        };
+
+        const currentTheme = document.documentElement.getAttribute('data-theme') || 'p3';
+        updateWorldAssets(currentTheme);
+
+        window.addEventListener('worldShift', (e: any) => {
+            updateWorldAssets(e.detail.theme);
+        });
+
+        // Animasi Summoning
         document.addEventListener('personaSummoned', () => {
             const calendar = document.getElementById('p3-calendar-root');
-            if (calendar) {
+            if (calendar && document.documentElement.getAttribute('data-theme') === 'p3') {
                 calendar.classList.remove('opacity-0', 'pointer-events-none');
                 calendar.classList.add('opacity-100');
             }
 
             const gun = document.getElementById('evoker-gun');
-            if (gun) {
+            if (gun && document.documentElement.getAttribute('data-theme') === 'p3') {
                 gun.style.transform = 'translateX(-50px) rotate(-45deg) scale(0.9)';
                 setTimeout(() => {
                     gun.style.opacity = '0';
                     gun.style.transform = 'translateY(200px)';
                 }, 200);
             }
+            
             const profile = document.getElementById('profile-image');
             if (profile) profile.classList.remove('grayscale');
-            const orpheus = document.getElementById('orpheus-container');
-            if (orpheus) {
-                orpheus.classList.remove('opacity-0', 'translate-x-20', 'scale-95');
-                orpheus.classList.add('opacity-100', 'translate-x-0', 'scale-100');
+            
+            const persona = document.getElementById('persona-container');
+            if (persona) {
+                persona.classList.remove('opacity-0', 'translate-x-20', 'scale-95');
+                persona.classList.add('opacity-100', 'translate-x-0', 'scale-100');
             }
         });
     </script>

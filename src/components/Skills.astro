@@ -11,12 +11,11 @@ const skills = [
 const stats = { 
     logic: 95,      
     database: 85, 
-    api: 90,      
+    api: 90,       
     growth: 100,   
     systems: 75,   
     legacy: 80     
 };
-
 
 const getPoint = (val: number, angle: number, factor: number = 0.45) => {
     const r = val * factor;
@@ -35,88 +34,118 @@ const dataPoints = [
 ].join(' ');
 ---
 
-<section id="skills" class="min-h-screen flex items-center justify-center py-12 relative overflow-hidden bg-[#000510] scroll-mt-18">
+<section id="skills" class="min-h-screen flex items-center justify-center py-12 relative overflow-hidden bg-transparent backdrop-blur-[2px] scroll-mt-18 border-y border-white/5">
     
-    <div class="absolute left-0 top-1/2 -translate-y-1/2 w-[250px] md:w-[450px] pointer-events-none opacity-20 z-0">
-        <img src="/orpheus.png" alt="Persona" class="w-full h-auto scale-x-[-1] drop-shadow-[0_0_20px_rgba(0,240,255,0.3)]" />
+    <div class="absolute -left-10 md:left-0 top-1/2 -translate-y-1/2 w-[350px] md:w-[650px] h-[80vh] pointer-events-none z-0 transition-all duration-1000 ease-in-out flex items-center justify-center">
+        <img 
+            id="persona-skill-img" 
+            src="/orpheus.png" 
+            alt="Persona Background" 
+            class="w-full h-full object-contain scale-x-[-1] drop-shadow-[0_0_50px_var(--persona-shadow)] transition-all duration-700 animate-float-slow opacity-60" 
+        />
     </div>
 
     <div class="container mx-auto px-6 relative z-10">
         
-        <div class="mb-8 flex items-center gap-3">
-            <div class="h-1 w-10 bg-cyan-400 shadow-[0_0_8px_rgba(34,211,238,0.8)]"></div>
-            <h2 class="text-3xl md:text-5xl font-black italic tracking-tighter text-white uppercase -skew-x-12">
-                User <span class="text-cyan-400">Parameters</span>
+        <div class="mb-12 flex items-center gap-4">
+            <div class="h-1.5 w-12 bg-primary shadow-[0_0_15px_var(--color-primary)]"></div>
+            <h2 class="text-4xl md:text-6xl font-black italic tracking-tighter text-white uppercase -skew-x-12 drop-shadow-lg">
+                User <span class="text-primary transition-colors">Parameters</span>
             </h2>
         </div>
 
-        <div class="flex flex-col lg:flex-row items-center justify-between gap-12 max-w-6xl mx-auto h-full">
+        <div class="flex flex-col lg:flex-row items-center justify-between gap-16 max-w-7xl mx-auto">
             
-            <div class="relative w-72 h-72 md:w-[450px] md:h-[450px] flex items-center justify-center">
+            <div class="relative w-80 h-80 md:w-[500px] md:h-[500px] flex items-center justify-center">
+                <div class="absolute -top-6 text-primary font-black italic tracking-widest text-[10px] md:text-xs -skew-x-12 drop-shadow-md">BACKEND LOGIC</div>
+                <div class="absolute top-16 -right-8 md:top-24 md:-right-12 text-primary font-black italic tracking-widest text-[10px] md:text-xs -skew-x-12 drop-shadow-md">DATABASE</div>
+                <div class="absolute bottom-16 -right-8 md:bottom-24 md:-right-12 text-primary font-black italic tracking-widest text-[10px] md:text-xs -skew-x-12 drop-shadow-md">API DESIGN</div>
+                <div class="absolute -bottom-6 text-primary font-black italic tracking-widest text-[10px] md:text-xs -skew-x-12 drop-shadow-md">GROWTH MINDSET</div>
+                <div class="absolute bottom-16 -left-8 md:bottom-24 md:-left-12 text-primary font-black italic tracking-widest text-[10px] md:text-xs -skew-x-12 drop-shadow-md">ARCHITECTURE</div>
+                <div class="absolute top-16 -left-8 md:top-24 md:-left-12 text-primary font-black italic tracking-widest text-[10px] md:text-xs -skew-x-12 drop-shadow-md">LEGACY CODE</div>
                 
-                <div class="absolute -top-6 text-cyan-400 font-black italic tracking-widest text-[9px] md:text-xs skew-x-[-12deg] drop-shadow-[0_0_5px_rgba(0,240,255,0.5)]">BACKEND LOGIC</div>
-                
-                <div class="absolute top-16 -right-8 md:top-24 md:-right-12 text-cyan-400 font-black italic tracking-widest text-[9px] md:text-xs skew-x-[-12deg] drop-shadow-[0_0_5px_rgba(0,240,255,0.5)]">DATABASE</div>
-                
-                <div class="absolute bottom-16 -right-8 md:bottom-24 md:-right-12 text-cyan-400 font-black italic tracking-widest text-[9px] md:text-xs skew-x-[-12deg] drop-shadow-[0_0_5px_rgba(0,240,255,0.5)]">API DESIGN</div>
-                
-                <div class="absolute -bottom-6 text-cyan-400 font-black italic tracking-widest text-[9px] md:text-xs skew-x-[-12deg] drop-shadow-[0_0_5px_rgba(0,240,255,0.5)]">GROWTH MINDSET</div>
-                
-                <div class="absolute bottom-16 -left-8 md:bottom-24 md:-left-12 text-cyan-400 font-black italic tracking-widest text-[9px] md:text-xs skew-x-[-12deg] drop-shadow-[0_0_5px_rgba(0,240,255,0.5)]">ARCHITECTURE</div>
-                
-                <div class="absolute top-16 -left-8 md:top-24 md:-left-12 text-cyan-400 font-black italic tracking-widest text-[9px] md:text-xs skew-x-[-12deg] drop-shadow-[0_0_5px_rgba(0,240,255,0.5)]">LEGACY CODE</div>
-                
-                <svg viewBox="0 0 100 100" class="w-full h-full drop-shadow-[0_0_20px_rgba(0,240,255,0.4)]">
-                    <polygon points="50,5 89,27.5 89,72.5 50,95 11,72.5 11,27.5" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="0.7" />
-                    <polygon points="50,16.25 79.25,33.125 79.25,66.875 50,83.75 20.75,66.875 20.75,33.125" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="0.5" />
-                    <polygon points="50,27.5 69.5,38.75 69.5,61.25 50,72.5 30.5,61.25 30.5,38.75" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="0.5" />
+                <svg viewBox="0 0 100 100" class="w-full h-full drop-shadow-[0_0_30px_var(--persona-shadow)]">
+                    <polygon points="50,5 89,27.5 89,72.5 50,95 11,72.5 11,27.5" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="0.7" />
                     
-                    <line x1="50" y1="5" x2="50" y2="95" stroke="rgba(255,255,255,0.1)" stroke-width="0.3" stroke-dasharray="1 1" />
-                    <line x1="11" y1="27.5" x2="89" y2="72.5" stroke="rgba(255,255,255,0.1)" stroke-width="0.3" stroke-dasharray="1 1" />
-                    <line x1="11" y1="72.5" x2="89" y2="27.5" stroke="rgba(255,255,255,0.1)" stroke-width="0.3" stroke-dasharray="1 1" />
-
                     <polygon 
                         points={dataPoints}
-                        fill="rgba(0, 240, 255, 0.45)" 
-                        stroke="#00f0ff" 
-                        stroke-width="1.2"
-                        class="animate-pulse"
+                        fill="var(--color-accent)" 
+                        stroke="var(--color-primary)" 
+                        stroke-width="1.5"
+                        class="animate-pulse opacity-60 transition-all duration-700"
                     />
 
                     {dataPoints.split(' ').map(point => (
-                        <circle cx={point.split(',')[0]} cy={point.split(',')[1]} r="1" fill="#fff" class="drop-shadow-[0_0_3px_#00f0ff]" />
+                        <circle cx={point.split(',')[0]} cy={point.split(',')[1]} r="1.2" fill="#fff" class="drop-shadow-[0_0_5px_var(--color-primary)]" />
                     ))}
-                    <circle cx="50" cy="50" r="1.5" fill="rgba(255,255,255,0.3)" />
                 </svg>
                 
-                <div class="absolute inset-0 border border-white/5 rounded-full -z-10 animate-[spin_20s_linear_infinite]"></div>
+                <div class="absolute inset-0 border-2 border-primary/10 rounded-full -z-10 animate-[spin_30s_linear_infinite]"></div>
             </div>
 
-            <div class="w-full lg:max-w-xl space-y-3">
-                <div class="text-white/40 font-mono text-[10px] tracking-[0.3em] mb-2"> SKILL PROTOCOL INITIALIZED</div>
+            <div class="w-full lg:max-w-xl space-y-4">
+                <div class="text-primary font-mono text-[10px] tracking-[0.4em] mb-4 opacity-70"> SYSTEM_MAINFRAME_DATA_SYNC </div>
                 
                 {skills.map((skill) => (
                     <div class="relative group">
-                        <div class="bg-gradient-to-r from-blue-950/60 to-transparent border-l-4 border-cyan-400 transform -skew-x-12 p-3 relative overflow-hidden transition-all duration-300">
-                            <div class="flex justify-between items-end mb-1 skew-x-12 px-1">
+                        <div class="bg-white/5 backdrop-blur-md border-l-4 border-primary -skew-x-12 p-4 relative overflow-hidden transition-all duration-300 hover:bg-primary/10 hover:pl-6 group shadow-lg">
+                            <div class="flex justify-between items-end mb-2 skew-x-12 px-1">
                                 <div class="flex flex-col">
-                                    <span class="text-[9px] text-cyan-500 font-bold uppercase tracking-tighter">{skill.category}</span>
-                                    <span class="font-black text-lg md:text-xl italic tracking-tighter text-white uppercase leading-none">{skill.name}</span>
+                                    <span class="text-[10px] text-primary font-black uppercase tracking-widest">{skill.category}</span>
+                                    <span class="font-black text-xl md:text-2xl italic tracking-tighter text-white uppercase leading-none">{skill.name}</span>
                                 </div>
                                 <div class="flex flex-col items-end leading-none">
-                                    <span class="text-[8px] text-white/30 font-mono">Intermediate</span>
-                                    <span class="font-black text-cyan-400 text-base md:text-lg italic tracking-widest">{skill.level}</span>
+                                    <span class="text-[9px] text-white/40 font-mono italic">Efficiency</span>
+                                    <span class="font-black text-primary text-lg md:text-xl italic tracking-widest">{skill.level}</span>
                                 </div>
                             </div>
-
-                            <div class="h-1.5 w-full bg-black/60 skew-x-12 relative border border-white/5">
-                                <div class="h-full bg-gradient-to-r from-blue-600 to-cyan-400 shadow-[0_0_10px_rgba(0,240,255,0.4)] transition-all duration-1000 ease-out" style={`width: ${skill.width}`}></div>
+                            <div class="h-2 w-full bg-black/40 skew-x-12 relative border border-white/5 overflow-hidden">
+                                <div 
+                                    class="h-full bg-primary shadow-[0_0_15px_var(--color-primary)] transition-all duration-[1500ms] ease-out" 
+                                    style={`width: ${skill.width}`}
+                                ></div>
                             </div>
                         </div>
                     </div>
                 ))}
             </div>
-
         </div>
     </div>
 </section>
+
+<style>
+  @keyframes float {
+    0%, 100% { transform: scaleX(-1) translateY(0); }
+    50% { transform: scaleX(-1) translateY(-20px); }
+  }
+  .animate-float-slow {
+    animation: float 8s ease-in-out infinite;
+  }
+</style>
+
+<script>
+  const updateSkillsUI = (theme: string) => {
+    const personaImg = document.getElementById('persona-skill-img') as HTMLImageElement;
+    
+    if (personaImg) {
+      personaImg.style.opacity = '0';
+      personaImg.style.transform = 'scaleX(-1) translateY(30px)';
+
+      setTimeout(() => {
+        // Ganti gambar (Pastikan Arsene.png atau Satanael.png ada di folder public/)
+        personaImg.src = theme === 'p5' ? '/Arsene.png' : '/orpheus.png';
+        
+        // Naikkan Opacity ke 0.6 agar lebih jelas terlihat
+        personaImg.style.opacity = '0.6';
+        personaImg.style.transform = 'scaleX(-1) translateY(0)';
+      }, 500);
+    }
+  };
+
+  const currentTheme = document.documentElement.getAttribute('data-theme') || 'p3';
+  updateSkillsUI(currentTheme);
+
+  window.addEventListener('worldShift', (e: any) => {
+    updateSkillsUI(e.detail.theme);
+  });
+</script>

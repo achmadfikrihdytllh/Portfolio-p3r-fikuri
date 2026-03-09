@@ -1,128 +1,129 @@
 ---
 // src/components/Calendar.astro
 ---
+<link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap" rel="stylesheet">
 
 <div 
-    id="p3-calendar-root" 
-    class="absolute top-2 right-2 md:top-4 md:right-4 z-[9999] pointer-events-none select-none flex-col items-end gap-1 md:gap-2 hidden opacity-0 transition-all duration-1000"
+    id="calendar-system-root" 
+    class="fixed top-2 right-2 md:top-4 md:right-4 z-[9999] pointer-events-none select-none flex-col items-end gap-1 md:gap-4 hidden opacity-0 transition-all duration-1000"
 >
-    <div id="p3-shake-container" class="relative flex items-center justify-end transition-transform">
-        <div id="p3-date-shadow" class="absolute inset-0 bg-blue-900/50 -skew-x-12 translate-x-1 translate-y-1 transition-colors duration-1000"></div>
-        
-        <div 
-            id="p3-date-box" 
-            class="relative bg-gradient-to-r from-blue-700 to-cyan-500 text-white px-3 py-1 md:px-6 md:py-2 -skew-x-12 border-b-2 md:border-b-4 border-white flex flex-col items-end leading-none shadow-lg transition-all duration-1000"
-        >
-            <div id="p3-month-day" class="text-2xl md:text-5xl font-black italic tracking-tighter skew-x-12">
-                --/--
+    <div id="p3-ui-wrapper" class="flex flex-col items-end gap-1 md:gap-2">
+        <div id="p3-shake-container" class="relative flex items-center justify-end transition-transform">
+            <div id="p3-date-shadow" class="absolute inset-0 bg-blue-900/50 -skew-x-12 translate-x-1 translate-y-1"></div>
+            <div id="p3-date-box" class="relative bg-gradient-to-r from-blue-700 to-cyan-500 text-white px-3 py-1 md:px-6 md:py-2 -skew-x-12 border-b-2 md:border-b-4 border-white flex flex-col items-end leading-none shadow-lg">
+                <div id="p3-month-day" class="text-2xl md:text-5xl font-black italic tracking-tighter skew-x-12">--/--</div>
+                <div id="p3-day-name" class="text-[10px] md:text-base font-bold tracking-widest skew-x-12 bg-white text-blue-900 px-1 md:px-2 mt-0.5 md:mt-1 self-start uppercase">---</div>
             </div>
-            <div id="p3-day-name" class="text-[10px] md:text-base font-bold tracking-widest skew-x-12 bg-white text-blue-900 px-1 md:px-2 mt-0.5 md:mt-1 self-start transition-colors duration-1000">
-                ---
+            <div id="moon-container" class="ml-2 md:ml-4 w-12 h-12 md:w-20 md:h-20 bg-black/80 rounded-full border-2 md:border-4 border-white relative overflow-hidden flex items-center justify-center shadow-[0_0_15px_rgba(255,255,255,0.3)]">
+                <div id="moon-icon" class="w-full h-full p-1.5 md:p-2 text-yellow-100 drop-shadow-[0_0_8px_rgba(253,251,211,0.8)]"></div>
+                <div id="moon-glow" class="absolute inset-0 bg-gradient-to-tr from-blue-500/20 to-transparent pointer-events-none"></div>
             </div>
         </div>
-
-        <div id="moon-container" class="ml-2 md:ml-4 w-12 h-12 md:w-20 md:h-20 bg-black/80 rounded-full border-2 md:border-4 border-white relative overflow-hidden flex items-center justify-center shadow-[0_0_15px_rgba(255,255,255,0.3)] transition-all duration-1000">
-            <div id="moon-icon" class="w-full h-full p-1.5 md:p-2 text-yellow-100 drop-shadow-[0_0_8px_rgba(253,251,211,0.8)] transition-all duration-1000">
-            </div>
-            <div id="moon-glow" class="absolute inset-0 bg-gradient-to-tr from-blue-500/20 to-transparent pointer-events-none transition-colors duration-1000"></div>
+        <div id="p3-status-box" class="bg-black/80 -skew-x-12 border-r-4 md:border-r-8 border-cyan-400 px-2 py-0.5 md:px-4 md:py-1 self-end shadow-md">
+            <div id="p3-time-status" class="text-[11px] md:text-lg font-black italic uppercase tracking-widest text-white skew-x-12">INITIALIZING...</div>
         </div>
     </div>
 
-    <div id="p3-status-box" class="bg-black/80 -skew-x-12 border-r-4 md:border-r-8 border-cyan-400 px-2 py-0.5 md:px-4 md:py-1 self-end shadow-md transition-all duration-1000">
-        <div id="p3-time-status" class="text-[11px] md:text-lg font-black italic uppercase tracking-widest text-white skew-x-12">
-            INITIALIZING...
+    <div id="p5-ui-wrapper" class="hidden flex-col items-end">
+        <div class="relative flex items-center justify-end group">
+            
+            <div class="relative bg-white text-black px-5 pt-2 pb-4 transform -rotate-[4deg] shadow-[10px_10px_0px_#000] border-[3px] border-black z-10 flex flex-col items-center min-w-[100px] md:min-w-[150px]">
+                <div class="flex items-center font-['Permanent_Marker'] leading-none text-black">
+                    <span id="p5-month" class="text-4xl md:text-7xl">3</span>
+                    <span class="text-2xl md:text-5xl mx-[-2px] transform rotate-[15deg]">/</span>
+                    <span id="p5-day" class="text-4xl md:text-7xl">09</span>
+                </div>
+                <div class="absolute -bottom-2 right-[-8px] bg-black text-white px-3 py-0.5 transform rotate-[2deg] shadow-[4px_4px_0px_rgba(255,0,0,0.5)] border border-white/20">
+                    <span id="p5-day-name" class="text-[10px] md:text-sm font-black italic uppercase tracking-wider">MONDAY</span>
+                </div>
+            </div>
+
+            <div class="ml-[-20px] bg-black p-1 border-[3px] border-white transform rotate-[12deg] shadow-[6px_6px_0px_#000] z-20">
+                <div id="p5-weather-icon" class="w-12 h-12 md:w-20 md:h-20 flex items-center justify-center text-white p-2">
+                    </div>
+            </div>
+        </div>
+        
+        <div class="mt-5 bg-white text-black px-10 py-1.5 transform -skew-x-[20deg] shadow-[8px_8px_0px_#000] border-y-4 border-black relative">
+            <div id="p5-time-status" class="text-sm md:text-2xl font-black italic uppercase tracking-tighter skew-x-[20deg]">AFTER SCHOOL</div>
+            <div class="absolute top-0 left-0 w-2 h-full bg-red-600"></div>
         </div>
     </div>
 </div>
 
-<script>
-    function updateP3Calendar() {
+<script is:inline>
+    function updateCalendar() {
         const now = new Date();
         const hour = now.getHours();
-        const days = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
-        
-        const monthDayEl = document.getElementById('p3-month-day');
-        if (monthDayEl) monthDayEl.innerText = `${now.getMonth() + 1}/${now.getDate()}`;
-        
-        const dayNameEl = document.getElementById('p3-day-name');
-        if (dayNameEl) dayNameEl.innerText = days[now.getDay()];
+        const month = now.getMonth() + 1;
+        const date = now.getDate();
+        const days = ['SUNDAY', 'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY'];
+        const currentTheme = document.documentElement.getAttribute('data-theme') || 'p3';
+
+        const statusP3 = document.getElementById('p3-time-status');
+        const statusP5 = document.getElementById('p5-time-status');
+        let statusText = "NIGHT";
+
+        // Logic Pembagian Waktu
+        if (hour >= 5 && hour < 8) statusText = "Early Morning";
+        else if (hour >= 8 && hour < 12) statusText = "Morning";
+        else if (hour >= 12 && hour < 13) statusText = "Lunchtime";
+        else if (hour >= 13 && hour < 17) statusText = "Afternoon";
+        else if (hour >= 17 && hour < 20) statusText = "After School";
+        else if (hour >= 20 && hour < 24) statusText = "Evening";
+        else if (hour >= 0 && hour < 5) statusText = "Midnight";
+
+        // Update P3 UI
+        const monthDayP3 = document.getElementById('p3-month-day');
+        if (monthDayP3) monthDayP3.innerText = `${month}/${date}`;
+        if (statusP3) statusP3.innerText = statusText === "Midnight" ? "DARK HOUR" : statusText;
+        const dayP3 = document.getElementById('p3-day-name');
+        if (dayP3) dayP3.innerText = days[now.getDay()].substring(0, 3);
 
         const lp = 2551443; 
         const new_moon = new Date(1970, 0, 7, 20, 35, 0);
         const phase = ((now.getTime() - new_moon.getTime()) / 1000) % lp;
-        const normalized = phase / lp;
-        const isFullMoon = normalized > 0.48 && normalized < 0.52; 
-        const statusEl = document.getElementById('p3-time-status');
-        let status = "DARK HOUR";
-        
-        if (isFullMoon) status = "⚠ FULL MOON ⚠";
-        else if (hour >= 5 && hour < 8) status = "Early Morning";
-        else if (hour >= 8 && hour < 12) status = "Morning";
-        else if (hour >= 12 && hour < 13) status = "Lunchtime";
-        else if (hour >= 13 && hour < 17) status = "Afternoon";
-        else if (hour >= 17 && hour < 20) status = "After Work";
-        else if (hour >= 20 && hour < 24) status = "Night";
-        else if (hour >= 0 && hour < 5) status = "DARK HOUR";
-        
-        if (statusEl) statusEl.innerText = status;
-
-        const root = document.getElementById('p3-calendar-root');
-        const shakeContainer = document.getElementById('p3-shake-container');
-        const dateBox = document.getElementById('p3-date-box');
-        const dateShadow = document.getElementById('p3-date-shadow');
-        const statusBox = document.getElementById('p3-status-box');
-        const dayLabel = document.getElementById('p3-day-name');
-        const moonGlow = document.getElementById('moon-glow');
-        const moonIcon = document.getElementById('moon-icon');
-
-        const colors = [
-            'from-blue-700', 'to-cyan-500', 'bg-blue-900/50', 'border-cyan-400', 'text-blue-900', 'from-blue-500/20', 'text-yellow-100',
-            'from-green-900', 'to-lime-500', 'bg-green-900/50', 'border-lime-400', 'text-green-900', 'from-lime-500/40', 'text-lime-200',
-            'from-orange-600', 'to-yellow-400', 'bg-orange-900/50', 'border-yellow-400', 'text-orange-900', 'from-orange-500/40', 'text-orange-100',
-            'from-red-700', 'to-yellow-500', 'bg-red-900/50', 'border-red-500', 'text-red-900', 'from-red-500/60', 'text-red-100'
-        ];
-        [dateBox, dateShadow, statusBox, dayLabel, moonGlow, moonIcon].forEach(el => el?.classList.remove(...colors));
-        shakeContainer?.classList.remove('animate-p3-shake');
-
-        if (isFullMoon) {
-            dateBox?.classList.add('from-red-700', 'to-yellow-500');
-            dateShadow?.classList.add('bg-red-900/50');
-            statusBox?.classList.add('border-red-500');
-            dayLabel?.classList.add('text-red-900');
-            moonGlow?.classList.add('from-red-500/60');
-            moonIcon?.classList.add('text-red-100');
-            shakeContainer?.classList.add('animate-p3-shake');
-        } 
-        else if (status === "DARK HOUR") {
-            dateBox?.classList.add('from-green-900', 'to-lime-500');
-            dateShadow?.classList.add('bg-green-900/50');
-            statusBox?.classList.add('border-lime-400');
-            dayLabel?.classList.add('text-green-900');
-            moonGlow?.classList.add('from-lime-500/40');
-            moonIcon?.classList.add('text-lime-200');
-        }
-        else if (status === "Afternoon" || status === "After Work") {
-            dateBox?.classList.add('from-orange-600', 'to-yellow-400');
-            dateShadow?.classList.add('bg-orange-900/50');
-            statusBox?.classList.add('border-yellow-400');
-            dayLabel?.classList.add('text-orange-900');
-            moonGlow?.classList.add('from-orange-500/40');
-            moonIcon?.classList.add('text-orange-100');
-        }
-        else {
-            dateBox?.classList.add('from-blue-700', 'to-cyan-500');
-            dateShadow?.classList.add('bg-blue-900/50');
-            statusBox?.classList.add('border-cyan-400');
-            dayLabel?.classList.add('text-blue-900');
-            moonGlow?.classList.add('from-blue-500/20');
-            moonIcon?.classList.add('text-yellow-100');
-        }
-
         const moonEl = document.getElementById('moon-icon');
-        if (moonEl) moonEl.innerHTML = getMoonSVG(normalized);
+        if (moonEl) moonEl.innerHTML = getMoonSVG(phase / lp);
+
+        // Update P5 UI
+        const mP5 = document.getElementById('p5-month');
+        const dP5 = document.getElementById('p5-day');
+        const dayP5 = document.getElementById('p5-day-name');
+        const weatherP5 = document.getElementById('p5-weather-icon');
+        
+        if (mP5) mP5.innerText = month;
+        if (dP5) dP5.innerText = date < 10 ? `0${date}` : date;
+        if (dayP5) dayP5.innerText = days[now.getDay()];
+        if (statusP5) statusP5.innerText = statusText.toUpperCase();
+        if (weatherP5) weatherP5.innerHTML = getTimeIconP5(statusText);
+
+        // Switch Visibility
+        const p3Wrapper = document.getElementById('p3-ui-wrapper');
+        const p5Wrapper = document.getElementById('p5-ui-wrapper');
+        
+        if (currentTheme === 'p5') {
+            p3Wrapper?.classList.add('hidden');
+            p5Wrapper?.classList.remove('hidden');
+            p5Wrapper?.classList.add('flex');
+        } else {
+            p3Wrapper?.classList.remove('hidden');
+            p3Wrapper?.classList.add('flex');
+            p5Wrapper?.classList.add('hidden');
+        }
     }
 
-    function getMoonSVG(p: number) {
+    function getTimeIconP5(status) {
+        if (status.includes("Morning") || status === "Lunchtime") {
+            return `<svg viewBox="0 0 24 24" fill="currentColor" class="w-full h-full"><path d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zM2 13h2c.55 0 1-.45 1-1s-.45-1-1-1H2c-.55 0-1 .45-1 1s.45 1 1 1zm18 0h2c.55 0 1-.45 1-1s-.45-1-1-1h-2c-.55 0-1 .45-1 1s.45 1 1 1zM11 2v2c0 .55.45 1 1 1s1-.45 1-1V2c0-.55-.45-1-1-1s-1 .45-1 1zm0 18v2c0 .55.45 1 1 1s1-.45 1-1v-2c0-.55-.45-1-1-1s-1 .45-1 1z"/></svg>`;
+        }
+        if (status.includes("Afternoon") || status.includes("School")) {
+            return `<svg viewBox="0 0 24 24" fill="currentColor" class="w-full h-full"><path d="M12 2L4.5 20.29l.71.71L12 18l6.79 3 .71-.71z"/></svg>`;
+        }
+        return `<svg viewBox="0 0 24 24" fill="currentColor" class="w-full h-full"><path d="M12.14 2.14a1 1 0 00-1.29 1.51 6.01 6.01 0 010 8.69 1 1 0 001.29 1.51 8 8 0 100-11.71z"/></svg>`;
+    }
+
+    function getMoonSVG(p) {
         if (p < 0.06 || p > 0.94) return `<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10" opacity="0.2"/></svg>`; 
         if (p < 0.25) return `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 1 12 2z"/></svg>`; 
         if (p < 0.44) return `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0 0 20V2z"/></svg>`; 
@@ -131,45 +132,28 @@
         return `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 1 1-10 10A10 10 0 0 0 12 2z"/></svg>`; 
     }
 
+    window.addEventListener('worldShift', updateCalendar);
+    
     document.addEventListener('personaSummoned', () => {
-        const calendarRoot = document.getElementById('p3-calendar-root');
-        if (calendarRoot) {
-            calendarRoot.classList.remove('hidden');
-            calendarRoot.classList.add('flex');
-            calendarRoot.classList.add('animate-calendar-in');
+        const root = document.getElementById('calendar-system-root');
+        if (root) {
+            root.classList.remove('hidden');
+            root.classList.add('flex');
+            root.classList.add('animate-calendar-in');
         }
-        updateP3Calendar();
+        updateCalendar();
     });
 
-    document.addEventListener('astro:after-swap', updateP3Calendar);
-    setInterval(updateP3Calendar, 60000);
+    document.addEventListener('astro:after-swap', updateCalendar);
+    setInterval(updateCalendar, 60000);
 </script>
 
 <style>
     @keyframes calendar-in {
-        from { opacity: 0; transform: translateX(30px) skewX(-12deg); }
-        to { opacity: 1; transform: translateX(0) skewX(0); }
+        from { opacity: 0; transform: translateX(30px) rotate(5deg); }
+        to { opacity: 1; transform: translateX(0) rotate(0deg); }
     }
-    
-    @keyframes p3-shake {
-        0% { transform: translate(1px, 1px) rotate(0deg); }
-        10% { transform: translate(-1px, -1px) rotate(-1deg); }
-        20% { transform: translate(-2px, 0px) rotate(1deg); }
-        30% { transform: translate(2px, 1px) rotate(0deg); }
-        40% { transform: translate(1px, -1px) rotate(1deg); }
-        50% { transform: translate(-1px, 1px) rotate(-1deg); }
-        60% { transform: translate(-2px, 1px) rotate(0deg); }
-        70% { transform: translate(2px, 1px) rotate(-1deg); }
-        80% { transform: translate(-1px, -1px) rotate(1deg); }
-        90% { transform: translate(1px, 1px) rotate(0deg); }
-        100% { transform: translate(1px, -1px) rotate(-1deg); }
-    }
-
     .animate-calendar-in {
-        animation: calendar-in 1s cubic-bezier(0.23, 1, 0.32, 1) forwards;
-    }
-
-    .animate-p3-shake {
-        animation: p3-shake 0.3s infinite;
+        animation: calendar-in 0.8s cubic-bezier(0.23, 1, 0.32, 1) forwards;
     }
 </style>

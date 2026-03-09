@@ -15,7 +15,7 @@ const links = [
         <img 
             src="/aigis-icon.png" 
             alt="System Menu" 
-            class="w-20 h-20 md:w-40 md:h-40 object-contain group-hover:rotate-12 transition-all duration-300 drop-shadow-[0_0_15px_rgba(0,240,255,0.6)]"
+            class="w-20 h-20 md:w-40 md:h-40 object-contain group-hover:rotate-12 transition-all duration-300 drop-shadow-[0_0_15px_var(--color-primary)]"
         />
     </button>
 
@@ -23,18 +23,36 @@ const links = [
         
         {links.map((link, index) => (
             <a href={link.href} class="menu-item group relative block opacity-0 -translate-x-5 transition-all duration-300" style={`transition-delay: ${index * 100}ms`}>
-                <div class="bg-black/90 border-l-2 border-gray-600 px-6 py-2 -skew-x-12 hover:bg-cyan-600 hover:border-white hover:pl-8 transition-all duration-200 min-w-[150px] shadow-[0_0_10px_rgba(0,0,0,0.5)]">
-                    <span class="block skew-x-12 text-sm font-bold text-gray-300 group-hover:text-white tracking-widest">
+                <div class="bg-black/90 border-l-4 border-primary px-6 py-2 -skew-x-12 hover:bg-primary hover:border-white hover:pl-8 transition-all duration-200 min-w-[180px] shadow-[0_0_15px_rgba(0,0,0,0.8)]">
+                    <span class="block skew-x-12 text-sm font-bold text-gray-300 group-hover:text-white tracking-widest uppercase italic">
                         {link.name}
                     </span>
                 </div>
             </a>
         ))}
 
+        <div class="menu-item opacity-0 -translate-x-5 transition-all duration-300 mt-4" style={`transition-delay: ${links.length * 100}ms`}>
+            <p class="text-[9px] font-black italic text-primary mb-2 tracking-tighter uppercase pl-1">Protocol_Shift_Sequence</p>
+            <div class="flex gap-2">
+                <button onclick="changeWorld('p5')" class="group/p5 relative w-12 h-12 bg-black border-2 border-red-600 -skew-x-12 hover:bg-red-600 transition-all shadow-lg active:scale-95 flex items-center justify-center">
+                    <svg viewBox="0 0 24 24" class="w-6 h-6 fill-red-600 group-hover/p5:fill-white transition-colors skew-x-12" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"/>
+                    </svg>
+                </button>
+
+                <button onclick="changeWorld('p3')" class="group/p3 relative w-12 h-12 bg-black border-2 border-cyan-400 -skew-x-12 hover:bg-cyan-400 transition-all shadow-lg active:scale-95 flex items-center justify-center">
+                    <svg viewBox="0 0 24 24" class="w-6 h-6 fill-cyan-400 group-hover/p3:fill-white transition-colors skew-x-12" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
     </div>
 </nav>
 
-<script>
+<script is:inline>
+    // Logic Menu Utama
     const menuBtn = document.getElementById('menu-toggle-btn');
     const dropdown = document.getElementById('menu-dropdown');
     const menuItems = document.querySelectorAll('.menu-item');
@@ -45,43 +63,45 @@ const links = [
 
     function toggleMenu() {
         if (isAnimating) return; 
-        
         isOpen = !isOpen;
         isAnimating = true;
 
         if (isOpen) {
             dropdown?.classList.remove('max-h-0', 'opacity-0');
-            dropdown?.classList.add('max-h-[500px]', 'opacity-100');
-            
+            dropdown?.classList.add('max-h-[600px]', 'opacity-100');
             menuItems.forEach((item, idx) => {
-                setTimeout(() => {
-                    item.classList.remove('opacity-0', '-translate-x-5');
-                }, idx * 100); 
+                setTimeout(() => item.classList.remove('opacity-0', '-translate-x-5'), idx * 80); 
             });
-
-            setTimeout(() => { isAnimating = false; }, menuItems.length * 100);
-
+            setTimeout(() => { isAnimating = false; }, menuItems.length * 80);
         } else {
             menuItems.forEach((item, idx) => {
-                const reverseDelay = (menuItems.length - 1 - idx) * 100;
-                setTimeout(() => {
-                    item.classList.add('opacity-0', '-translate-x-5');
-                }, reverseDelay);
+                const reverseDelay = (menuItems.length - 1 - idx) * 80;
+                setTimeout(() => item.classList.add('opacity-0', '-translate-x-5'), reverseDelay);
             });
-
             setTimeout(() => {
-                dropdown?.classList.remove('max-h-[500px]', 'opacity-100');
+                dropdown?.classList.remove('max-h-[600px]', 'opacity-100');
                 dropdown?.classList.add('max-h-0', 'opacity-0');
                 isAnimating = false; 
-            }, menuItems.length * 100);
+            }, menuItems.length * 80);
         }
     }
 
-    menuBtn?.addEventListener('click', toggleMenu);
+    // Logic WORLD SHIFT (Broadcast Signal)
+    window.changeWorld = function(world) {
+        document.documentElement.setAttribute('data-theme', world);
+        localStorage.setItem('persona-theme', world);
+        
+        // Kirim sinyal ke Aigis, MusicPlayer, dan Hero
+        window.dispatchEvent(new CustomEvent('worldShift', { detail: { theme: world } }));
+        
+        // Berikan feedback visual kecil (Opsional)
+        console.log("PROCOTOL_SHIFT: Initializing " + world.toUpperCase() + " environment.");
+    }
 
+    menuBtn?.addEventListener('click', toggleMenu);
     menuItems.forEach(link => {
-        link.addEventListener('click', () => {
-            if(isOpen) toggleMenu();
+        link.addEventListener('click', (e) => {
+            if (e.target.tagName !== 'BUTTON' && isOpen) toggleMenu();
         });
     });
 
