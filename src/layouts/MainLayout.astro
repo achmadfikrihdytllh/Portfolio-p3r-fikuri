@@ -8,6 +8,7 @@ import { ViewTransitions } from 'astro:transitions';
 import ProjectModal from "../components/ProjectModal.astro";
 import AigisChat from '../components/AigisChat.astro'; 
 
+
 interface Props {
   title: string;
   isVelvetRoom?: boolean;
@@ -51,11 +52,14 @@ const {
         data-page-type={isVelvetRoom ? "velvet" : "normal"}
         class="bg-p-bg text-white font-['Exo_2'] overflow-x-hidden relative min-h-screen transition-all duration-[1000ms]"
     >
+
         <div 
             id="normal-bg" 
-            class="fixed inset-0 z-[-10] transition-opacity duration-[2000ms] bg-cover bg-center bg-no-repeat"
-            style="background: radial-gradient(circle at 80% 0%, var(--color-primary) 0%, var(--color-accent) 45%, var(--color-bg) 100%); opacity: 0.6;"
-        ></div>
+            class="fixed inset-0 z-[-8] transition-opacity duration-[2000ms] bg-cover bg-center bg-no-repeat"
+            style="background-image: url('/p3rwallpaper.png'); opacity: 0.6;"
+        >
+            <div class="absolute inset-0 bg-gradient-to-b from-blue-900/20 via-transparent to-black/40"></div>
+        </div>
         
         <div id="dark-hour-bg" class="fixed inset-0 z-[-9] opacity-0 transition-opacity duration-[3000ms] bg-cover bg-center bg-no-repeat pointer-events-none" style="background-image: url('/dark-hour.png');">
             <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_20%,rgba(0,0,0,0.8)_100%)]"></div>
@@ -96,11 +100,11 @@ const {
 
                 const normalBg = document.getElementById('normal-bg');
                 const darkHourBg = document.getElementById('dark-hour-bg');
-                const p5Bg = document.getElementById('p5-bg'); // Layer Baru
+                const p5Bg = document.getElementById('p5-bg');
                 const baseVignette = document.getElementById('base-vignette');
                 const bubbles = document.getElementById('bubbles-wrapper');
 
-                // Logika Reset Semua
+                // Reset Opacity
                 if (normalBg) normalBg.style.opacity = "0";
                 if (darkHourBg) darkHourBg.style.opacity = "0";
                 if (p5Bg) p5Bg.style.opacity = "0";
@@ -113,7 +117,6 @@ const {
 
                 // EKSEKUSI TEMA
                 if (currentTheme === 'p5') {
-                    // MODE PERSONA 5
                     if (p5Bg) p5Bg.style.opacity = "1";
                     if (baseVignette) baseVignette.style.opacity = "0.7";
                 } else {
@@ -125,6 +128,7 @@ const {
                         if (darkHourBg) darkHourBg.style.opacity = "1";
                     } else {
                         body.classList.remove('dark-hour-active');
+                        // Tampilkan p3wallpaper.png (normalBg)
                         if (normalBg) normalBg.style.opacity = "0.6";
                         if (bubbles) bubbles.style.opacity = "1";
                     }
