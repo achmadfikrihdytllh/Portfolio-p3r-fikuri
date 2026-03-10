@@ -34,16 +34,26 @@ const links = [
         <div class="menu-item opacity-0 -translate-x-5 transition-all duration-300 mt-4" style={`transition-delay: ${links.length * 100}ms`}>
             <p class="text-[9px] font-black italic text-primary mb-2 tracking-tighter uppercase pl-1">Protocol_Shift_Sequence</p>
             <div class="flex gap-2">
-                <button onclick="changeWorld('p5')" class="group/p5 relative w-12 h-12 bg-black border-2 border-red-600 -skew-x-12 hover:bg-red-600 transition-all shadow-lg active:scale-95 flex items-center justify-center">
-                    <svg viewBox="0 0 24 24" class="w-6 h-6 fill-red-600 group-hover/p5:fill-white transition-colors skew-x-12" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"/>
-                    </svg>
+                <button onclick="changeWorld('p5')" class="group/p5 relative w-12 h-12 bg-transparent border-0 -skew-x-12 transition-all active:scale-95 flex items-center justify-center overflow-hidden">
+                    <video
+                        id="p5-switch-video"
+                        src="/Phantom%20Thieves%20Logo.mp4"
+                        class="absolute inset-0 w-full h-full opacity-0 pointer-events-none"
+                        autoplay
+                        muted
+                        loop
+                        playsinline
+                        preload="auto"
+                    ></video>
+                    <canvas id="p5-switch-canvas" class="w-16 h-16 object-contain skew-x-12 pointer-events-none"></canvas>
                 </button>
 
-                <button onclick="changeWorld('p3')" class="group/p3 relative w-12 h-12 bg-black border-2 border-cyan-400 -skew-x-12 hover:bg-cyan-400 transition-all shadow-lg active:scale-95 flex items-center justify-center">
-                    <svg viewBox="0 0 24 24" class="w-6 h-6 fill-cyan-400 group-hover/p3:fill-white transition-colors skew-x-12" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
-                    </svg>
+                <button onclick="changeWorld('p3')" class="group/p3 relative w-12 h-12 bg-black border-2 border-cyan-400 -skew-x-12 hover:bg-cyan-400 transition-all shadow-lg active:scale-95 flex items-center justify-center overflow-hidden">
+                    <img
+                        src="/p3logo.png"
+                        alt="P3 logo"
+                        class="w-9 h-9 object-contain skew-x-12 pointer-events-none"
+                    />
                 </button>
             </div>
         </div>
@@ -104,6 +114,127 @@ const links = [
             if (e.target.tagName !== 'BUTTON' && isOpen) toggleMenu();
         });
     });
+
+    const initP5SwitcherLogo = () => {
+        const video = document.getElementById('p5-switch-video');
+        const canvas = document.getElementById('p5-switch-canvas');
+        if (!video || !canvas) return;
+
+        const ctx = canvas.getContext('2d', { willReadFrequently: true });
+        if (!ctx) return;
+        const workCanvas = document.createElement('canvas');
+        const workCtx = workCanvas.getContext('2d', { willReadFrequently: true });
+        if (!workCtx) return;
+
+        let rafId = 0;
+        let ready = false;
+        const maxProcessSize = 220;
+
+        const setupCanvasSize = () => {
+            const vw = Math.max(1, video.videoWidth);
+            const vh = Math.max(1, video.videoHeight);
+            const scale = Math.min(1, maxProcessSize / Math.max(vw, vh));
+            const w = Math.max(1, Math.round(vw * scale));
+            const h = Math.max(1, Math.round(vh * scale));
+
+            workCanvas.width = w;
+            workCanvas.height = h;
+            canvas.width = w;
+            canvas.height = h;
+        };
+
+        const removeGreenAndGetBounds = () => {
+            workCtx.clearRect(0, 0, workCanvas.width, workCanvas.height);
+            workCtx.drawImage(video, 0, 0, workCanvas.width, workCanvas.height);
+
+            const frame = workCtx.getImageData(0, 0, workCanvas.width, workCanvas.height);
+            const data = frame.data;
+            let minX = workCanvas.width;
+            let minY = workCanvas.height;
+            let maxX = -1;
+            let maxY = -1;
+
+            for (let i = 0; i < data.length; i += 4) {
+                const r = data[i];
+                const g = data[i + 1];
+                const b = data[i + 2];
+                const isGreen = g > 150 && (g - r) > 45 && (g - b) > 45;
+                if (isGreen) {
+                    data[i + 3] = 0;
+                    continue;
+                }
+
+                if (data[i + 3] > 20) {
+                    const px = (i / 4) % workCanvas.width;
+                    const py = Math.floor((i / 4) / workCanvas.width);
+                    if (px < minX) minX = px;
+                    if (py < minY) minY = py;
+                    if (px > maxX) maxX = px;
+                    if (py > maxY) maxY = py;
+                }
+            }
+
+            workCtx.putImageData(frame, 0, 0);
+
+            if (maxX < minX || maxY < minY) return null;
+            return {
+                x: minX,
+                y: minY,
+                w: Math.max(1, maxX - minX + 1),
+                h: Math.max(1, maxY - minY + 1),
+            };
+        };
+
+        const drawFittedLogo = () => {
+            const bounds = removeGreenAndGetBounds();
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            if (!bounds) return;
+
+            const padding = 0;
+            const availW = canvas.width * (1 - padding * 2);
+            const availH = canvas.height * (1 - padding * 2);
+            const scale = Math.min(availW / bounds.w, availH / bounds.h);
+            const destW = bounds.w * scale;
+            const destH = bounds.h * scale;
+            const destX = (canvas.width - destW) / 2;
+            const destY = (canvas.height - destH) / 2;
+
+            ctx.drawImage(workCanvas, bounds.x, bounds.y, bounds.w, bounds.h, destX, destY, destW, destH);
+        };
+
+        const draw = () => {
+            if (!ready || video.paused || video.ended) return;
+            drawFittedLogo();
+            rafId = requestAnimationFrame(draw);
+        };
+
+        const drawStaticFrame = () => {
+            if (!canvas.width || !canvas.height) return;
+            drawFittedLogo();
+        };
+
+        const start = async () => {
+            try {
+                await video.play();
+                ready = true;
+                if (!rafId) rafId = requestAnimationFrame(draw);
+            } catch {
+                drawStaticFrame();
+            }
+        };
+
+        video.addEventListener('loadeddata', () => {
+            setupCanvasSize();
+            drawStaticFrame();
+            start();
+        }, { once: true });
+
+        document.addEventListener('click', () => {
+            if (!ready) start();
+        }, { once: true });
+    };
+
+    initP5SwitcherLogo();
 
     document.addEventListener('personaSummoned', () => {
         if (navbarContainer) {
