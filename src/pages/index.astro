@@ -25,6 +25,18 @@ import AigisChat from '../components/AigisChat.astro';
                 <div class="w-56 h-56 md:w-80 md:h-80 shrink-0 relative group z-50">
                     <div id="profile-border" class="absolute inset-0 border-2 border-primary -skew-x-6 transform group-hover:skew-x-0 transition-all duration-500 shadow-[0_0_25px_var(--persona-shadow)]"></div>
                     <div class="absolute inset-0 bg-accent/80 -skew-x-6 translate-x-3 translate-y-3 -z-10 transition-colors"></div>
+
+                    <div id="phantom-logo-wrap" class="absolute left-0 top-0 -translate-x-[40%] -translate-y-[54%] z-[70] w-52 md:w-72 pointer-events-none opacity-0 transition-opacity duration-300">
+                        <video
+                            id="phantom-logo-video"
+                            class="absolute inset-0 w-full h-full opacity-0 pointer-events-none"
+                            muted
+                            loop
+                            playsinline
+                            preload="auto"
+                        ></video>
+                        <canvas id="phantom-logo-canvas" class="w-full h-full drop-shadow-[0_0_12px_rgba(255,0,0,0.65)]"></canvas>
+                    </div>
                     
                     <img 
                         id="profile-image"
@@ -92,7 +104,17 @@ import AigisChat from '../components/AigisChat.astro';
             const evoker = document.getElementById('evoker-gun');
             const footerText = document.getElementById('footer-text');
             const calendar = document.getElementById('p3-calendar-root');
-            const normalBg = document.getElementById('normal-bg'); // Mengambil element dari Layout
+            const phantomLogoWrap = document.getElementById('phantom-logo-wrap') as HTMLDivElement | null;
+
+            if (phantomLogoWrap) {
+                if (theme === 'p5') {
+                    phantomLogoWrap.style.display = 'block';
+                    phantomLogoWrap.style.opacity = '1';
+                } else {
+                    phantomLogoWrap.style.opacity = '0';
+                    phantomLogoWrap.style.display = 'none';
+                }
+            }
 
             if (theme === 'p5') {
                 // Protokol Persona 5
@@ -100,26 +122,12 @@ import AigisChat from '../components/AigisChat.astro';
                 if (evoker) evoker.style.display = "none";
                 if (calendar) calendar.style.display = "none";
                 if (footerText) footerText.innerText = "© 2026 Fikuri Olenyeva || PHANTOM_THIEVES PROTOCOL";
-                
-                // MENGAKTIFKAN SHIBUYA
-                if (normalBg) {
-                    normalBg.style.backgroundImage = "url('/shibuya.png')";
-                    normalBg.style.backgroundSize = "cover";
-                    normalBg.style.backgroundPosition = "center";
-                    normalBg.style.opacity = "0.7"; // Biar kontrasnya enak dilihat
-                }
             } else {
                 // Protokol Persona 3
                 if (personaImg) personaImg.src = "/thanatos.png";
                 if (evoker) evoker.style.display = "none";
                 if (calendar) calendar.style.display = "block";
                 if (footerText) footerText.innerText = "© 2026 Fikuri Olenyeva || S.E.E.S PROTOCOL";
-                
-                // KEMBALI KE GRADASI BIRU
-                if (normalBg) {
-                    normalBg.style.backgroundImage = "block";
-                    normalBg.style.opacity = "0.4";
-                }
             }
         };
 
@@ -129,6 +137,139 @@ import AigisChat from '../components/AigisChat.astro';
         window.addEventListener('worldShift', (e: any) => {
             updateWorldAssets(e.detail.theme);
         });
+
+        const initPhantomLogoOverlay = () => {
+            const wrap = document.getElementById('phantom-logo-wrap') as HTMLDivElement | null;
+            const video = document.getElementById('phantom-logo-video') as HTMLVideoElement | null;
+            const canvas = document.getElementById('phantom-logo-canvas') as HTMLCanvasElement | null;
+
+            if (!wrap || !video || !canvas) return;
+
+            const ctx = canvas.getContext('2d', { willReadFrequently: true });
+            if (!ctx) return;
+
+            const candidates = ['/Phantom Thieves.mp4', '/Phantom Thieves Logo.mp4', '/phantom-thieves-logo.mp4'];
+            let rafId = 0;
+            let ready = false;
+
+            const draw = () => {
+                if (!ready || video.paused || video.ended) return;
+
+                ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+                const frame = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                const data = frame.data;
+
+                for (let i = 0; i < data.length; i += 4) {
+                    const r = data[i];
+                    const g = data[i + 1];
+                    const b = data[i + 2];
+                    const isGreen = g > 150 && (g - r) > 45 && (g - b) > 45;
+                    if (isGreen) data[i + 3] = 0;
+                }
+
+                ctx.putImageData(frame, 0, 0);
+                rafId = requestAnimationFrame(draw);
+            };
+
+            const drawStaticFrame = () => {
+                if (!canvas.width || !canvas.height) return;
+                ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+                const frame = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                const data = frame.data;
+
+                for (let i = 0; i < data.length; i += 4) {
+                    const r = data[i];
+                    const g = data[i + 1];
+                    const b = data[i + 2];
+                    const isGreen = g > 150 && (g - r) > 45 && (g - b) > 45;
+                    if (isGreen) data[i + 3] = 0;
+                }
+
+                ctx.putImageData(frame, 0, 0);
+                wrap.style.opacity = '1';
+            };
+
+            const startRender = async () => {
+                try {
+                    await video.play();
+                    ready = true;
+                    wrap.style.opacity = '1';
+                    if (!rafId) rafId = requestAnimationFrame(draw);
+                } catch {
+                    drawStaticFrame();
+                }
+            };
+
+            const syncLogoVisibility = () => {
+                const theme = document.documentElement.getAttribute('data-theme') || 'p3';
+
+                if (theme !== 'p5') {
+                    wrap.style.opacity = '0';
+                    wrap.style.display = 'none';
+                    cancelAnimationFrame(rafId);
+                    rafId = 0;
+                    video.pause();
+                    return;
+                }
+
+                wrap.style.display = 'block';
+                wrap.style.opacity = '1';
+                if (canvas.width && canvas.height) drawStaticFrame();
+                if (!ready) startRender();
+            };
+
+            video.addEventListener('loadeddata', () => {
+                wrap.style.aspectRatio = `${Math.max(1, video.videoWidth)} / ${Math.max(1, video.videoHeight)}`;
+                canvas.width = Math.max(1, video.videoWidth);
+                canvas.height = Math.max(1, video.videoHeight);
+                drawStaticFrame();
+                startRender();
+            }, { once: true });
+
+            document.addEventListener('click', () => {
+                if (!ready) startRender();
+            }, { once: true });
+
+            document.addEventListener('visibilitychange', () => {
+                if (document.hidden) {
+                    cancelAnimationFrame(rafId);
+                    rafId = 0;
+                    video.pause();
+                    return;
+                }
+
+                if (ready) startRender();
+            });
+
+            window.addEventListener('worldShift', () => {
+                syncLogoVisibility();
+            });
+
+            document.addEventListener('personaSummoned', () => {
+                syncLogoVisibility();
+            });
+
+            const trySource = (idx: number) => {
+                if (idx >= candidates.length) {
+                    wrap.style.opacity = '1';
+                    return;
+                }
+
+                const onError = () => {
+                    video.removeEventListener('error', onError);
+                    trySource(idx + 1);
+                };
+
+                video.addEventListener('error', onError, { once: true });
+                video.src = candidates[idx];
+                video.load();
+            };
+
+            trySource(0);
+            syncLogoVisibility();
+        };
+
+        initPhantomLogoOverlay();
 
         // Animasi Summoning
         document.addEventListener('personaSummoned', () => {
