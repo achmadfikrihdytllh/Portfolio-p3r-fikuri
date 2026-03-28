@@ -1,4 +1,6 @@
 ---
+import type { p } from "framer-motion/client";
+
 // src/components/Projects.astro
 
 const projects = [
@@ -11,10 +13,10 @@ const projects = [
     description: "Pengembangan sistem Backend presensi karyawan berbasis REST API menggunakan AdonisJS (TypeScript) dan PostgreSQL.",
     tech: ["AdonisJS", "PostgreSQL", "REST API", "TypeScript"],
     link: null, 
-    image: "/project1.jpg", 
+    image: "/hris/Presensi.png", 
     fullDescription: "Pengembangan sistem Backend presensi karyawan berbasis REST API menggunakan AdonisJS (TypeScript) dan PostgreSQL. Sistem ini menangani pencatatan kehadiran real-time dengan dukungan Multi-Timezone, integrasi penyimpanan bukti foto (Signed URLs), serta fitur manajemen koreksi data oleh Admin yang menggunakan Database Transactions untuk menjamin integritas data.",
     features: ["RESTful API Architecture", "JWT Authentication", "Role-based Access Control", "Automated Attendance Logs"],
-    gallery: ["/project1.png", "/project1.png"]
+    gallery: ["/hris/image.png", "/hris/Presensi.png"]
   },
   
   { 
@@ -41,10 +43,10 @@ const projects = [
     description: "Backend API untuk job matching & user profiling platform rekrutmen Jepang.",
     tech: ["AdonisJS", "PostgreSQL", "TypeScript"], 
     link: null, 
-    image: "/Thumbnail.png",
+    image: "/japancareer/image1.png",
     fullDescription: "Sistem backend skala besar yang mengelola pencocokan kandidat dengan pekerjaan di Jepang berdasarkan profil user.",
     features: ["Matching Algorithm", "Candidate Profiling", "Data Query Optimization"],
-    gallery: ["/Thumbnail.png"]
+    gallery: ["/japancareer/image1.png", "/japancareer/image2.png", "/japancareer/image3.png", "/japancareer/image4.png", "/japancareer/image5.png", "/japancareer/image6.png", "/japancareer/image7.png"]
   },
 
   { 
